@@ -45,7 +45,7 @@ by
   | S k HI => rw [add, add, HI]
 
 theorem Add_Ass :
-  ∀ (n m k : Nat), n + m + k = n + (m + k) :=
+  ∀ (n m k : Nat), (n + m) + k = n + (m + k) :=
 by
   intro n m k
   induction k with
