@@ -1,6 +1,7 @@
 import Init.Prelude
 import FMCn.CFR1.Definitions
 import FMCn.CFR1.Useful
+import FMCn.CFR1.Functions
 
 ------------------------------------------------
 -- Parte Relação de Equivalência:
@@ -119,14 +120,6 @@ by
 
 ------------------------Sum-Pow------------------------
 
-def Prod_Pow_to_Sum {α β δ : Type}: (α → δ) × (β → δ) → α ⊕ β → δ
-  | w => (fun x => match x with
-                    | .inl a => w.1 a
-                    | .inr b => w.2 b)
-
-def Pow_Sum_to_Prod {α β δ : Type}: (α ⊕ β → δ) → (α → δ) × (β → δ)
-  | f => ⟨fun x => f (.inl x), fun y => f (.inr y)⟩
-
 theorem iso_pow_sum {α β δ : Type}:
   (α ⊕ β → δ) ≅ ((α → δ) × (β → δ)) :=
 by
@@ -143,20 +136,14 @@ by
 
 ------------------------Curry------------------------
 
-def curry : (α × β → δ) → α → β → δ
-  | f => fun a => fun b => f ⟨a, b⟩
-
-def descurry : (α → β → δ) → α × β → δ
-  | f => fun w => f w.1 w.2
-
 theorem iso_curry {α β δ : Type}:
   (α → β → δ) ≅ (α × β → δ) :=
 by
-  refine ⟨descurry, curry, ?_, ?_⟩
+  refine ⟨uncurry, curry, ?_, ?_⟩
   · funext f w
-    rw [Function.comp, curry, descurry, id]
+    rw [Function.comp, curry, uncurry, id]
   · funext g a b
-    rw [Function.comp, descurry, curry, id]
+    rw [Function.comp, uncurry, curry, id]
 
 -----------------------Pow-Empty-----------------------
 /-
@@ -188,12 +175,6 @@ by
 -/
 ------------------------Pow-One------------------------
 
-def Pow_one {α : Type} : (Unit → α) → α
-  | f => f ()
-
-def Pow_one_back {α : Type}: α → Unit → α
-  | a => fun () => a
-
 theorem iso_pow_unit {α : Type}:
   (Unit → α) ≅ α :=
 by
@@ -204,14 +185,6 @@ by
     rw [Function.comp, Pow_one, Pow_one_back, id]
 
 ------------------------Pow-Two------------------------
-
-def Pow_two {α : Type} : (Unit ⊕ Unit → α) → α × α
-  | f => ⟨f (.inl ()), f (.inr ())⟩
-
-def Two_pow {α : Type} : α × α → Unit ⊕ Unit → α
-  | w => fun x => (match x with
-                    | .inl _ => w.1
-                    | .inr _ => w.2)
 
 theorem iso_pow_two {α : Type}:
   (Unit ⊕ Unit → α) ≅ (α × α) :=
@@ -226,12 +199,6 @@ by
     | inr _ => rfl
 
 ------------------------Unit-Pow------------------------
-
-def One_pow {α : Type} : (α → Unit) → Unit
-  | _ => ()
-
-def One_pow_back {α : Type} : Unit → α → Unit
-  | _ => fun _ => ()
 
 theorem iso_one_pow {α : Type}:
   (α → Unit) ≅ Unit :=
@@ -258,14 +225,6 @@ by
 -/
 ------------------------Distr-L------------------------
 
-def Distr (α β δ : Type) : δ × (α ⊕ β) → (δ × α) ⊕ (δ × β)
-  | ⟨d, .inl a⟩ => .inl ⟨d, a⟩
-  | ⟨d, .inr b⟩ => .inr ⟨d, b⟩
-
-def Distr_back {α β δ : Type} : (δ × α) ⊕ (δ × β) → δ × (α ⊕ β)
-  | .inl w => ⟨w.1, .inl w.2⟩
-  | .inr w => ⟨w.1, .inr w.2⟩
-
 theorem iso_distr_L {α β δ : Type}:
   (δ × (α ⊕ β)) ≅ ((δ × α) ⊕ (δ × β)) :=
 by
@@ -282,16 +241,6 @@ by
     | inr b => rfl
 
 ------------------------Sum-Ass------------------------
-
-def Ass_sum_one {α β γ : Type} : α ⊕ β ⊕ γ → (α ⊕ β) ⊕ γ
-  | .inl a => .inl (.inl a)
-  | .inr (.inl b) => .inl (.inr b)
-  | .inr (.inr c) => .inr c
-
-def Ass_sum_two {α β γ : Type} : (α ⊕ β) ⊕ γ → α ⊕ β ⊕ γ
-  | .inl (.inl a) => .inl a
-  | .inl (.inr b) => .inr (.inl b)
-  | .inr c => .inr (.inr c)
 
 theorem iso_sum_ass {α β γ : Type}:
   (α ⊕ β ⊕ γ) ≅ ((α ⊕ β) ⊕ γ) :=
@@ -314,10 +263,6 @@ by
 
 ------------------------Sum-Com------------------------
 
-def Com_sum (α β : Type) : α ⊕ β → β ⊕ α
-  | .inl a => .inr a
-  | .inr b => .inl b
-
 theorem iso_sum_com {α β : Type}:
   (α ⊕ β) ≅ (β ⊕ α) :=
 by
@@ -335,12 +280,6 @@ by
 
 -------------------------Sum-Id-------------------------
 
-def Id_sum {α : Type}: α ⊕ Empty → α
-  | .inl x => x
-
-def Sum_id {α : Type}: α → α ⊕ Empty
-  | x => .inl x
-
 theorem iso_sum_id {α : Type}:
   (α ⊕ Empty) ≅ α :=
 by
@@ -355,12 +294,6 @@ by
 
 ------------------------Prod-Ass------------------------
 
-def Ass_prod_one { α β γ : Type} : (α × β) × γ → α × β × γ
-  | ⟨ab, c⟩ => ⟨ab.1, ⟨ab.2, c⟩⟩
-
-def Ass_prod_two {α β γ : Type} : α × β × γ → (α × β) × γ
-  | ⟨a, bc⟩ => ⟨⟨a, bc.1⟩, bc.2⟩
-
 theorem iso_prod_ass {α β γ : Type}:
   ((α × β) × γ) ≅ (α × β × γ) :=
 by
@@ -371,9 +304,6 @@ by
     rw [Function.comp, Ass_prod_two, Ass_prod_one, id]
 
 ------------------------Prod-Com------------------------
-
-def Com_prod (α β : Type) : α × β → β × α
-  | w => ⟨w.2, w.1⟩
 
 theorem iso_prod_com {α β : Type}:
   (α × β) ≅ (β × α) :=
@@ -411,12 +341,6 @@ by
   exact iso_trans ((α ⊕ β) × δ) (δ × (α ⊕ β)) (α × δ ⊕ β × δ) h h3
 
 -------------------------Prod-Id-------------------------
-
-def Id_prod {α : Type} : α × Unit → α
-  | w => w.1
-
-def Prod_id {α : Type} : α → α × Unit
-  | a => ⟨a, ()⟩
 
 theorem iso_prod_id {α : Type}:
   (α × Unit) ≅ α :=

@@ -11,19 +11,6 @@ def iso (α β : Type) : Prop :=
   ∃ (f : α → β) (g : β → α), f ∘ g = id ∧ g ∘ f = id
 infix:50    " ≅ " => iso
 
-def Fun_to_sum : (α → α') → (β → β') → α ⊕ β → α' ⊕ β'
-  | f, _, (.inl a) => .inl (f a)
-  | _, g, (.inr b) => .inr (g b)
-
-def Fun_to_cross : (α → α') → (β → β') → α × β → α' × β'
-  | f, g, w => ⟨f (w.1), g (w.2)⟩
-
-def Fun_to_fun : (α' → α) → (β → β') → (α → β) → α' → β'
-  | f, g, h => g ∘ h ∘ f
-
-def Δ : α → α × α
-  | a => ⟨a, a⟩
-
 variable {A : Type u}
 
 def reflexive (R : A  → A → Prop) : Prop :=
