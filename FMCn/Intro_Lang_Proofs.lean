@@ -312,6 +312,23 @@ by
     intro p'
     exact False.elim (p p')
 
+theorem iff_negtodisj_conj_neg :
+  (¬P ↔ P ∨ Q) → ¬P ∧ Q :=
+by
+  intro h
+  refine ⟨?_, ?_⟩
+  · intro p
+    suffices hpoq : P ∨ Q from (h.2 hpoq) p
+    · apply Or.inl p
+  · by_cases p : P
+    · suffices hpoq : P ∨ Q from False.elim ((h.2 hpoq) p)
+      · apply Or.inl p
+    · have hpoq : P ∨ Q := h.1 p
+      apply hpoq.elim
+      · intro p'
+        exact False.elim (p p')
+      · exact impl_refl Q
+
 ----------------------------------------------------------
 -- Proposições de distributividade dos ∨,∧:
 ----------------------------------------------------------
