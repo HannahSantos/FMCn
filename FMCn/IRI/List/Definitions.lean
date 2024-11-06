@@ -77,13 +77,13 @@ def doubleList : ‖Nat‖ → ‖Nat‖
   := fmap double
 
 def addNat : Nat → ‖Nat‖ → ‖Nat‖
-  := fun n => fmap (λx : Nat => x + n)
+  := λn => fmap (λx : Nat => x + n)
 
 def multNat : Nat → ‖Nat‖ → ‖Nat‖
-  := fun n => fmap (λx : Nat => x * n)
+  := λn => fmap (λx : Nat => x * n)
 
 def expNat : Nat → ‖Nat‖ → ‖Nat‖
-  := fun n => fmap (λx : Nat => x ^ n)
+  := λn => fmap (λx : Nat => x ^ n)
 
 def enumTo : Nat → ‖Nat‖
   | S n => append (S n) (enumTo n)
@@ -112,7 +112,8 @@ def dropWhile : (α → Bool) → ‖α‖ → ‖α‖
 
 def elemIndices : Nat → ‖Nat‖ → ‖Nat‖
   | n, x∷xs => let xs' := elemIndices n xs
-               if n == x then O∷addNat (S O) xs' else addNat (S O) xs'
+               if n == x then O∷addNat (S O) xs'
+               else addNat (S O) xs'
   | _, ⟦⟧ => ⟦⟧
 
 def pw : (α → β → γ) → ‖α‖ → ‖β‖ → ‖γ‖
@@ -144,7 +145,7 @@ def isPrefixOf : ‖Nat‖ → ‖Nat‖ → Bool
   | _, _ => false
 
 def mix : ‖α‖ → ‖α‖ → ‖α‖
-  | n∷ns, m∷ms => n∷(m∷(mix ns ms))
+  | x∷xs, y∷ys => x∷(y∷(mix xs ys))
   | _, _ => ⟦⟧
 
 def interspace : α → ‖α‖ → ‖α‖
