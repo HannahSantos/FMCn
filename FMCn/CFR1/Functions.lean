@@ -1,3 +1,8 @@
+variable {α α' β β' γ δ : Type}
+
+def comp : (β → γ) → (α → β) → α → γ
+  | f, g, a => f (g a)
+infixr:75 " ⋄ " => comp
 
 def Fun_to_sum : (α → α') → (β → β') → α ⊕ β → α' ⊕ β'
   | f, _, (.inl a) => .inl (f a)
@@ -7,7 +12,7 @@ def Fun_to_cross : (α → α') → (β → β') → α × β → α' × β'
   | f, g, ⟨a, b⟩ => ⟨f a, g b⟩
 
 def Fun_to_fun : (α' → α) → (β → β') → (α → β) → α' → β'
-  | f, g, h => g ∘ h ∘ f
+  | f, g, h => g ⋄ h ⋄ f
 
 def Δ : α → α × α
   | a => ⟨a, a⟩

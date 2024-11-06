@@ -25,7 +25,7 @@ theorem iso_trans:
   transitive iso :=
 by
   intro α β γ ⟨f, g, h⟩ ⟨f', g', h'⟩
-  refine ⟨(f' ∘ f), (g ∘ g'), ?_, ?_⟩
+  refine ⟨(f' ⋄ f), (g ⋄ g'), ?_, ?_⟩
   · rw [comp_assoc, ← comp_assoc g' g f,
         h.1, (id_comp g').1, h'.1]
   · rw [comp_assoc, ← comp_assoc f f' g',
@@ -56,11 +56,13 @@ by
   intro α α' β β' ⟨⟨fa, fa', ha⟩,⟨gb, gb', hb⟩⟩
   refine ⟨Fun_to_sum fa gb, Fun_to_sum fa' gb', ?_, ?_⟩
   · funext ab'
+    rw [comp_def]
     unfold Fun_to_sum
     cases ab' with
     | inl a' => simp; rw [← comp_def fa' fa, ha.1, id]
     | inr b' => simp; rw [← comp_def gb' gb, hb.1, id]
   · funext ab
+    rw [comp_def]
     unfold Fun_to_sum
     cases ab with
     | inl a => simp; rw [← comp_def fa fa', ha.2, id]
@@ -72,11 +74,13 @@ by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨Fun_to_cross fa gb, Fun_to_cross fa' gb', ?_, ?_⟩
   · funext w'
+    rw [comp_def]
     unfold Fun_to_cross
     simp
     rw [← comp_def fa' fa, ← comp_def gb' gb,
         ha.1, hb.1, id, id]
   · funext w
+    rw [comp_def]
     unfold Fun_to_cross
     simp
     rw [← comp_def fa fa', ← comp_def gb gb',
@@ -88,15 +92,17 @@ by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨Fun_to_fun fa' gb, Fun_to_fun fa gb', ?_, ?_⟩
   · funext h
+    rw [comp_def]
     unfold Fun_to_fun
     simp
-    rw [comp_assoc fa' (h ∘ fa) gb', comp_assoc fa' fa h,
+    rw [comp_assoc fa' (h ⋄ fa) gb', comp_assoc fa' fa h,
         ha.1, (id_comp h).2, ← comp_assoc h gb' gb,
         hb.1, (id_comp h).1]
   · funext h
+    rw [comp_def]
     unfold Fun_to_fun
     simp
-    rw [comp_assoc fa (h ∘ fa') gb, comp_assoc fa fa' h,
+    rw [comp_assoc fa (h ⋄ fa') gb, comp_assoc fa fa' h,
         ha.2, (id_comp h).2, ← comp_assoc h gb gb',
         hb.2, (id_comp h).1]
 
@@ -125,9 +131,9 @@ theorem iso_pow_sum {α β δ : Type}:
 by
   refine ⟨Pow_Sum_to_Prod, Prod_Pow_to_Sum, ?_, ?_⟩
   · funext w
-    rw [Function.comp, Prod_Pow_to_Sum, Pow_Sum_to_Prod, id]
+    rw [comp_def, Prod_Pow_to_Sum, Pow_Sum_to_Prod, id]
   · funext f
-    rw [Function.comp, Pow_Sum_to_Prod, Prod_Pow_to_Sum, id]
+    rw [comp_def, Pow_Sum_to_Prod, Prod_Pow_to_Sum, id]
     simp
     funext x
     cases x with
@@ -141,9 +147,9 @@ theorem iso_curry {α β δ : Type}:
 by
   refine ⟨uncurry, curry, ?_, ?_⟩
   · funext f w
-    rw [Function.comp, curry, uncurry, id]
+    rw [comp_def, curry, uncurry, id]
   · funext g a b
-    rw [Function.comp, uncurry, curry, id]
+    rw [comp_def, uncurry, curry, id]
 
 -----------------------Pow-Empty-----------------------
 /-
@@ -167,9 +173,9 @@ theorem iso_eq_one {α : Type} :
 by
   refine ⟨Pow_empty, Unit_to_pow, ?_, ?_⟩
   · funext ()
-    rw [Function.comp, Unit_to_pow, Pow_empty, id]
+    rw [comp_def, Unit_to_pow, Pow_empty, id]
   · funext f
-    rw [Function.comp, Pow_empty, Unit_to_pow, id]
+    rw [comp_def, Pow_empty, Unit_to_pow, id]
     simp
     exact only_one_empty_fun Empty_fun f
 -/
@@ -180,9 +186,9 @@ theorem iso_pow_unit {α : Type}:
 by
   refine ⟨Pow_one, Pow_one_back, ?_, ?_⟩
   · funext a
-    rw [Function.comp, Pow_one_back, Pow_one, id]
+    rw [comp_def, Pow_one_back, Pow_one, id]
   · funext f
-    rw [Function.comp, Pow_one, Pow_one_back, id]
+    rw [comp_def, Pow_one, Pow_one_back, id]
 
 ------------------------Pow-Two------------------------
 
@@ -191,9 +197,9 @@ theorem iso_pow_two {α : Type}:
 by
   refine ⟨Pow_two, Two_pow, ?_, ?_⟩
   · funext w
-    rw [Function.comp, Two_pow, Pow_two, id]
+    rw [comp_def, Two_pow, Pow_two, id]
   · funext f x
-    rw [Function.comp, Pow_two, Two_pow, id]
+    rw [comp_def, Pow_two, Two_pow, id]
     cases x with
     | inl _ => rfl
     | inr _ => rfl
@@ -205,9 +211,9 @@ theorem iso_one_pow {α : Type}:
 by
   refine ⟨One_pow, One_pow_back, ?_, ?_⟩
   · funext ()
-    rw [Function.comp, One_pow_back, One_pow, id]
+    rw [comp_def, One_pow_back, One_pow, id]
   · funext f
-    rw [Function.comp, One_pow, One_pow_back, id]
+    rw [comp_def, One_pow, One_pow_back, id]
 
 -----------------------Empty-Pow-----------------------
 
@@ -230,12 +236,12 @@ theorem iso_distr_L {α β δ : Type}:
 by
   refine ⟨Distr α β δ, Distr_back, ?_, ?_⟩
   · funext x
-    rw [Function.comp, Distr_back, Distr, id]
+    rw [comp_def, Distr_back, Distr, id]
     cases x with
     | inl da => rfl
     | inr db => rfl
   · funext ⟨d, x⟩
-    rw [Function.comp, Distr, Distr_back, id]
+    rw [comp_def, Distr, Distr_back, id]
     cases x with
     | inl a => rfl
     | inr b => rfl
@@ -247,14 +253,14 @@ theorem iso_sum_ass {α β γ : Type}:
 by
   refine ⟨Ass_sum_one, Ass_sum_two, ?_, ?_⟩
   · funext x
-    rw [Function.comp, Ass_sum_two, Ass_sum_one, id]
+    rw [comp_def, Ass_sum_two, Ass_sum_one, id]
     cases x with
     | inl ab => cases ab with
                 | inl a => rfl
                 | inr b => rfl
     | inr c => rfl
   · funext y
-    rw [Function.comp, Ass_sum_one, Ass_sum_two, id]
+    rw [comp_def, Ass_sum_one, Ass_sum_two, id]
     cases y with
     | inl a => rfl
     | inr bc => cases bc with
@@ -268,12 +274,12 @@ theorem iso_sum_com {α β : Type}:
 by
   refine ⟨Com_sum α β, Com_sum β α, ?_, ?_⟩
   · funext x
-    rw [Function.comp, Com_sum, Com_sum, id]
+    rw [comp_def, Com_sum, Com_sum, id]
     cases x with
     | inr a => rfl
     | inl b => rfl
   · funext y
-    rw [Function.comp, Com_sum, Com_sum, id]
+    rw [comp_def, Com_sum, Com_sum, id]
     cases y with
     | inr b => rfl
     | inl a => rfl
@@ -285,9 +291,9 @@ theorem iso_sum_id {α : Type}:
 by
   refine ⟨Id_sum, Sum_id, ?_, ?_⟩
   · funext a
-    rw [Function.comp, Sum_id, Id_sum, id]
+    rw [comp_def, Sum_id, Id_sum, id]
   · funext x
-    rw [Function.comp, Id_sum, Sum_id, id]
+    rw [comp_def, Id_sum, Sum_id, id]
     cases x with
     | inl a => rfl
     | inr e => contradiction
@@ -299,9 +305,9 @@ theorem iso_prod_ass {α β γ : Type}:
 by
   refine ⟨Ass_prod_one, Ass_prod_two, ?_, ?_⟩
   · funext ⟨a, bc⟩
-    rw [Function.comp, Ass_prod_two, Ass_prod_one, id]
+    rw [comp_def, Ass_prod_two, Ass_prod_one, id]
   · funext ⟨ab, c⟩
-    rw [Function.comp, Ass_prod_two, Ass_prod_one, id]
+    rw [comp_def, Ass_prod_two, Ass_prod_one, id]
 
 ------------------------Prod-Com------------------------
 
@@ -310,9 +316,9 @@ theorem iso_prod_com {α β : Type}:
 by
   refine ⟨Com_prod α β, Com_prod β α, ?_, ?_⟩
   · funext w
-    rw [Function.comp, Com_prod, Com_prod, id]
+    rw [comp_def, Com_prod, Com_prod, id]
   · funext w'
-    rw [Function.comp, Com_prod, Com_prod, id]
+    rw [comp_def, Com_prod, Com_prod, id]
 
 ------------------------Distr-R------------------------
 
@@ -347,9 +353,9 @@ theorem iso_prod_id {α : Type}:
 by
   refine ⟨Id_prod, Prod_id, ?_, ?_⟩
   · funext a
-    rw [Function.comp, Prod_id, Id_prod, id]
+    rw [comp_def, Prod_id, Id_prod, id]
   · funext w
-    rw [Function.comp, Id_prod, Prod_id, id]
+    rw [comp_def, Id_prod, Prod_id, id]
 
 ------------------------Prod-Anul------------------------
 
@@ -365,9 +371,9 @@ theorem iso_prod_anul {a : Type}:
 by
   refine ⟨to_empty, from_empty, ?_, ?_⟩
   · funext x
-    rw [Function.comp, from_empty, to_empty, id]
+    rw [comp_def, from_empty, to_empty, id]
   · funext x
-    rw [Function.comp, from_empty, to_empty, id]
+    rw [comp_def, from_empty, to_empty, id]
     simp
     -/
 

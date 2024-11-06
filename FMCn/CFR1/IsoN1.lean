@@ -1,4 +1,5 @@
 import FMCn.CFR1.Definitions
+import FMCn.CFR1.Useful
 import FMCn.IRI.Nat.Definitions
 
 namespace data
@@ -21,12 +22,12 @@ theorem iso_nat_unit:
 by
   refine ⟨G, F, ?_, ?_⟩
   · funext x
-    rw [Function.comp, F, G]
+    rw [comp_def, F, G]
     cases x with
     | O => rfl
     | S n => rfl
   · funext y
-    rw [Function.comp, G, F]
+    rw [comp_def, G, F]
     cases y with
     | inl n => rfl
     | inr unit => rfl

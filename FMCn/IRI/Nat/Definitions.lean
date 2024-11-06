@@ -44,7 +44,7 @@ def lt : Nat → Nat → Bool
 infix:65 " < " => lt
 
 def double : Nat → Nat
-  := uncurry add ∘ Δ
+  := uncurry add ⋄ Δ
 
 def min₂ : Nat → Nat → Nat
   | .S n, .S m => .S (min₂ n m)

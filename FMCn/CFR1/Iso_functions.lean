@@ -14,8 +14,8 @@ by
   · intro f' h'
     refine ⟨?_, ?_⟩
     · intro a a' ha
-      have h1 : (f' ∘ f) a = (f' ∘ f) a' :=
-        by rw [Function.comp, Function.comp, univ f' ha]
+      have h1 : (f' ⋄ f) a = (f' ⋄ f) a' :=
+        by rw [comp_def, comp_def, univ f' ha]
       rw [h'.2, id, id] at h1
       exact h1
     · intro b
