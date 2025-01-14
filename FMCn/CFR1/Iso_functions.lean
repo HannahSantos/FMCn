@@ -2,9 +2,26 @@ import FMCn.CFR1.Definitions
 import FMCn.Intro_Lang_Proofs
 import FMCn.CFR1.Useful
 
+namespace data
+
 ------------------------------------------------
 --
 ------------------------------------------------
+theorem iso_L_cancel {α β : Type} {f : α → β} :
+  iso_offun f → ∃ (g : β → α), (g ⋄ f) = id :=
+by
+  intro h
+  apply h.elim
+  · intro f' h'
+    refine ⟨f', h'.2⟩
+
+theorem iso_R_cancel {α β : Type} {f : α → β} :
+  iso_offun f → ∃ (g : β → α), (f ⋄ g) = id :=
+by
+  intro h
+  apply h.elim
+  · intro f' h'
+    refine ⟨f', h'.1⟩
 
 theorem iso_inj_sobr {α β : Type} {f : α → β} :
   iso_offun f → injetiva f ∧ sobrejetiva f :=
