@@ -1,5 +1,29 @@
 variable {α α' β β' γ δ : Type}
 
+namespace data
+
+def id : α → α
+  | x => x
+
+def outl : α × β → α
+  | ⟨a, _⟩ => a
+
+def outr : α × β → β
+  | ⟨_, b⟩ => b
+
+def prod_fun : (α → γ) → (β → δ) → α × β → γ × δ
+  | f, g, ⟨a, b⟩ => ⟨f a, g b⟩
+infix:80 " × " => prod_fun
+
+def pairing : (δ → α) → (δ → β) → δ → α × β
+  | f, g, d => ⟨f d, g d⟩
+notation "⟪" f ", " g "⟫" => pairing f g
+
+def copairing : (α → γ) → (β → δ) → α ⊕ β → γ ⊕ δ
+  | f, _, .inl x => .inl (f x)
+  | _, g, .inr x => .inr (g x)
+infix:80 " ⊕ " => copairing
+
 def comp : (β → γ) → (α → β) → α → γ
   | f, g, a => f (g a)
 infixr:75 " ⋄ " => comp
