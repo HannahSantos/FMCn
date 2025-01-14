@@ -1,7 +1,7 @@
 import FMCn.IRI.Nat.Definitions
 import FMCn.Intro_Lang_Proofs
 import FMCn.CFR1.Useful
-import FMCn.IEA.Definitions
+import FMCn.IEA.Monoid.Definitions
 
 namespace data
 
