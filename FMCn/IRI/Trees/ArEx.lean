@@ -1,3 +1,8 @@
+import FMCn.IRI.Nat.Definitions
+import FMCn.IRI.Nat.Theorems
+
+namespace data
+
 inductive ArEx where
   | Plus : ArEx → ArEx → ArEx
   | Times : ArEx → ArEx → ArEx
@@ -11,7 +16,7 @@ def eval : ArEx → Int
   | .Atom s => s
 
 def height : ArEx → Nat
-  | .Plus s t => max (height s) (height t)
-  | .Times s t => max (height s) (height t)
-  | .Neg s => .succ (height s)
-  | .Atom _ => 0
+  | .Plus s t => max₂ (height s) (height t)
+  | .Times s t => max₂ (height s) (height t)
+  | .Neg s => .S (height s)
+  | .Atom _ => .O
