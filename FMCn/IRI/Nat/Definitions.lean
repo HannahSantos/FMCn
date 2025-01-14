@@ -1,10 +1,18 @@
 import FMCn.CFR1.Functions
+import FMCn.IRI.Bool.Definitions
 namespace data
 
 inductive Nat where
   | O : Nat
   | S : Nat → Nat
-deriving Repr
+
+def fromNat : Nat → String
+  | .O => "O"
+  | .S n => "S" ++ fromNat n
+
+instance : Repr Nat where
+  reprPrec
+  | n, _ => Std.Format.text (fromNat n)
 
 def eq : Nat → Nat → Bool
   | .O, .O => .true
@@ -16,6 +24,13 @@ def pred : Nat → Nat
   | .O => .O
   | .S n => n
 
+#eval pred (.S (.S .O))
+
+def monus : Nat → Nat → Nat
+  | .S n, .S m => monus n m
+  | _, _ => .O
+infix:65 " ∸ " => monus
+
 def add : Nat → Nat → Nat
   | n, .O => n
   | n, .S m => .S (add n m)
@@ -24,27 +39,35 @@ infixl:65 " + " => add
 def mul : Nat → Nat → Nat
   | _, .O => .O
   | n, .S m => mul n m + n
-infixl:65 " * " => mul
+infixl:70 " * " => mul
 
 def pow : Nat → Nat → Nat
   | _, .O => .S .O
   | n, .S m => pow n m * n
-infixr:65 " ^ " => pow
+infixr:75 " ^ " => pow
 
 def leq : Nat → Nat → Bool
-  | .O, _ => true
-  | _, .O => false
+  | .O, _ => .true
+  | _, .O => .false
   | .S n, .S m => leq n m
 infix:65 " ≤ " => leq
 
 def lt : Nat → Nat → Bool
-  | _, .O => false
-  | .O, _ => true
+  | _, .O => .false
+  | .O, _ => .true
   | .S n, .S m => lt n m
 infix:65 " < " => lt
 
 def double : Nat → Nat
   := uncurry add ⋄ Δ
+
+def fact : Nat → Nat
+  | .O => (.S .O)
+  | .S n => mul (.S n) (fact n)
+
+def fib : Nat → Nat
+  | .S (.S n) => fib (.S n) + fib n
+  | n => n
 
 def min₂ : Nat → Nat → Nat
   | .S n, .S m => .S (min₂ n m)
@@ -54,23 +77,28 @@ def max₂ : Nat → Nat → Nat
   | .O, m => m
   | n, .O => n
   | .S n, .S m => .S (max₂ n m)
+/-
+def div : Nat × Nat → Unit ⊕ Nat × Nat
+  | ⟨_, .O⟩ => .inl ()
+  | ⟨n, m⟩ => if n < m then .inr ⟨.O, n⟩ else div ⟨.S (n ∸ m), m⟩
 
+def quot : Nat × Nat → Unit ⊕ Nat
+  := sorry
+-/
 mutual
 def even : Nat → Bool
-  | .O => true
+  | .O => .true
   | .S n => odd n
 
 def odd : Nat → Bool
-  | .O => false
+  | .O => .false
   | .S n => even n
 end
 
 def Zero : Nat → Bool
-  | .O => true
-  | _ => false
+  | .O => .true
+  | _ => .false
 
 def stripMaybe : Nat ⊕ Unit → Nat
   | .inl n => n
   | .inr () => .O
-
-axiom peano_neg {n : Nat} : ¬ Nat.O = Nat.S n
