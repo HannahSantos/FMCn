@@ -1,7 +1,9 @@
 import FMCn.CFR1.Functions
 
+namespace data
+
 def iso_offun {α β : Type} (f : α → β): Prop :=
-  ∃ (g : β → α), f ⋄ g = id ∧ g ⋄ f = id
+  ∃ (g : β → α), (f ⋄ g) = id ∧ (g ⋄ f) = id
 
 def injetiva {α β : Type} (f : α → β) : Prop :=
   ∀ (a a' : α), f a = f a' → a = a'
