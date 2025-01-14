@@ -1,7 +1,7 @@
-import FMCn.IEA.Definitions
-import FMCn.IEA.Monoid
+import FMCn.IEA.Group.Definitions
+import FMCn.IEA.Monoid.Theorems
 
-open has_Op has_Id has_Inv Semigroup Monoid Group
+open Magma Semigroup Monoid Group
 
 ------------------------------------------------
 -- Useful Theorems :

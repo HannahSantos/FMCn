@@ -1,6 +1,6 @@
-import FMCn.IEA.Definitions
+import FMCn.IEA.Monoid.Definitions
 
-open has_Op has_Id has_Inv Semigroup Monoid
+open Magma Semigroup Monoid
 
 theorem Op_Only_Id [Monoid M] :
   ∀ (u v : M), u é a identidade ∧ v é a identidade → u = v :=

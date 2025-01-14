@@ -1,22 +1,4 @@
-------------------------------------------------
--- Algebra :
-------------------------------------------------
-
-class has_Op (α : Type u) where op : α × α → α
-notation:65 a:65 " ⋆ " b:66 => has_Op.op ⟨a, b⟩
-open has_Op
-
-class Semigroup (α : Type u) extends has_Op α where
-  Op_Ass : ∀ (a b c : α), a ⋆ b ⋆ c = a ⋆ (b ⋆ c)
-open Semigroup
-
-class has_Id (α : Type u) where e : α
-open has_Id
-
-class Monoid (α : Type u) extends Semigroup α, has_Id α where
-  Id_Op : ∀ (a : α), e ⋆ a = a
-  Op_Id : ∀ (a : α), a ⋆ e = a
-open Monoid
+import FMCn.IEA.Monoid.Definitions
 
 class has_Inv (α : Type u) where inv : α → α
 postfix:max "⁻¹"  => has_Inv.inv
@@ -25,29 +7,11 @@ open has_Inv
 class Group (α : Type u) extends Monoid α, has_Inv α where
   Op_Inv_L : ∀ (a : α), a⁻¹ ⋆ a = e
   Op_Inv_R : ∀ (a : α), a ⋆ a⁻¹ = e
-open Group
+open Monoid Group
 
 def invG [Group G] (x a : G): Prop :=
   x ⋆ a = e ∧ a ⋆ x = e
 notation:65 a:65 " é o inverso de " b:66 => invG a b
-
-def idM [Monoid M] (x : M) : Prop :=
-  (∀ (a : M), a ⋆ x = a) ∧ ∀ (b : M), x ⋆ b = b
-notation:65 x:65 " é a identidade" => idM x
-
-------------------------------------------------
--- Pows :
-------------------------------------------------
-
-def Pow_R [Monoid M] : M → Nat → M
-  | _, 0 => e
-  | a, .succ n => a ⋆ (Pow_R a n)
-notation:65 lhs:65 " ↑ᴿ " rhs:66 => Pow_R lhs rhs
-
-def Pow_L [Monoid M] : Nat → M → M
-  | 0, _ => e
-  | .succ n, a => (Pow_L n a) ⋆ a
-notation:65 lhs:65 " ↑ᴸ " rhs:66 => Pow_L rhs lhs
 
 ------------------------------------------------
 -- Group-Homomorphisms :
