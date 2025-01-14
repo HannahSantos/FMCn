@@ -1,6 +1,7 @@
 import FMCn.IRI.Nat.Definitions
 import FMCn.Intro_Lang_Proofs
 import FMCn.CFR1.Useful
+import FMCn.IEA.Definitions
 
 namespace data
 
@@ -9,6 +10,11 @@ open Nat
 ----------------------------------------------------------
 -- Succ-Inj:
 ----------------------------------------------------------
+theorem zero_ne_succ :
+  ∀ (n : Nat), O ≠ S n :=
+by
+  intro n h
+  cases h -- Magia?
 
 theorem pred_succ :
   ∀ (n : Nat), pred (S n) = n :=
@@ -27,6 +33,12 @@ by
 ----------------------------------------------------------
 -- Soma:
 ----------------------------------------------------------
+
+theorem Add_zero_R :
+  ∀ (n : Nat), n + O = n :=
+by
+  intro n
+  rw [add]
 
 theorem Add_zero_L :
   ∀ (n : Nat), O + n = n :=
@@ -51,6 +63,17 @@ by
   induction k with
   | O => rw [add, add]
   | S k HI => rw [add, add, add, HI]
+
+----------------------------------------------------------
+-- (Nat, +, O) é um Monoid
+----------------------------------------------------------
+
+instance : Monoid Nat where
+  op := uncurry add
+  e := O
+  Op_Ass := Add_Ass
+  Op_Id := Add_zero_R
+  Id_Op := Add_zero_L
 
 theorem Add_Com :
   ∀ (n m : Nat), n + m = m + n :=
@@ -179,10 +202,12 @@ by
   apply demorgan_forall_converse
   refine ⟨S (S O), ?_⟩
   intro ha
-  cases a with
+  induction a with
   | O => rw [pow, mul] at ha
-         exact peano_neg (S O) ha
-  | S k => rw [pow, Pow_Id_R, mul, add, Mul_succ_L,
-               ← Pow_two_eq_Mul_self] at ha
-           have ha' : (k ^ S (S O)) + k + k = S O :=
+         exact zero_ne_succ (S O) ha
+  | S k HI => rw [pow, Pow_Id_R, mul, add, Mul_succ_L,
+                  ← Pow_two_eq_Mul_self] at ha
+              have ha' : (k ^ S (S O)) + k + k = S O :=
+                succ_inj ((k ^ S (S O)) + k + k) (S O) ha
+              rw [] at ha'
 -/
