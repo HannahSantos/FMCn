@@ -68,12 +68,12 @@ by
 -- (Nat, +, O) é um Monoid
 ----------------------------------------------------------
 
-instance : Monoid Nat where
-  op := uncurry add
-  e := O
-  Op_Ass := Add_Ass
-  Op_Id := Add_zero_R
-  Id_Op := Add_zero_L
+instance : MonoidA Nat where
+  opa := uncurry add
+  z := O
+  opa_ass := Add_Ass
+  opa_id := Add_zero_R
+  id_opa := Add_zero_L
 
 theorem Add_Com :
   ∀ (n m : Nat), n + m = m + n :=

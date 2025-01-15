@@ -34,7 +34,7 @@ by
   rw [comp_def, comp_def,
       comp_def, comp_def]
 
-theorem univ {α β : Type} {a a' : α}:
+theorem univ {α β : Type u} {a a' : α}:
   ∀ (f : α → β), a = a' → f a = f a' :=
 by
   intro f h
