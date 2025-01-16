@@ -1,4 +1,3 @@
-import Init.Prelude
 import FMCn.CFR1.Definitions
 import FMCn.CFR1.Useful
 import FMCn.CFR1.Functions
@@ -55,36 +54,38 @@ theorem iso_sum:
   respects_sum :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩,⟨gb, gb', hb⟩⟩
-  refine ⟨Fun_to_sum fa gb, Fun_to_sum fa' gb', ?_, ?_⟩
+  refine ⟨fa ⊕ gb, fa' ⊕ gb', ?_, ?_⟩
   · funext ab'
     rw [comp_def]
-    unfold Fun_to_sum
     cases ab' with
-    | inl a' => simp; rw [← comp_def fa' fa, ha.1, id_def, id_def]
-    | inr b' => simp; rw [← comp_def gb' gb, hb.1, id_def, id_def]
+    | inl a' => rw [copairing_left, copairing_left,
+                    ← comp_def fa' fa, ha.1, id_def,
+                    id_def]
+    | inr b' => rw [copairing_right, copairing_right,
+                    ← comp_def gb' gb, hb.1, id_def,
+                    id_def]
   · funext ab
     rw [comp_def]
-    unfold Fun_to_sum
     cases ab with
-    | inl a => simp; rw [← comp_def fa fa', ha.2, id_def, id_def]
-    | inr b => simp; rw [← comp_def gb gb', hb.2, id_def, id_def]
+    | inl a => rw [copairing_left, copairing_left,
+                   ← comp_def fa fa', ha.2, id_def,
+                   id_def]
+    | inr b => rw [copairing_right, copairing_right,
+                   ← comp_def gb gb', hb.2, id_def,
+                   id_def]
 
 theorem iso_prod:
   respects_prod :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
-  refine ⟨Fun_to_cross fa gb, Fun_to_cross fa' gb', ?_, ?_⟩
+  refine ⟨fa × gb, fa' × gb', ?_, ?_⟩
   · funext w'
-    rw [comp_def]
-    unfold Fun_to_cross
-    simp
-    rw [← comp_def fa' fa, ← comp_def gb' gb,
+    rw [comp_def, prod_fun_def, prod_fun_def,
+        ← comp_def fa' fa, ← comp_def gb' gb,
         ha.1, hb.1, id_def, id_def, id_def]
   · funext w
-    rw [comp_def]
-    unfold Fun_to_cross
-    simp
-    rw [← comp_def fa fa', ← comp_def gb gb',
+    rw [comp_def, prod_fun_def, prod_fun_def,
+        ← comp_def fa fa', ← comp_def gb gb',
         ha.2, hb.2, id_def, id_def, id_def]
 
 theorem iso_fun:

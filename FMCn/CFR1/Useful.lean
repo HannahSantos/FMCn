@@ -72,6 +72,21 @@ theorem pairing_def {f : δ → α} {g : δ → β} {d : δ} :
 by
   rw [pairing]
 
+theorem prod_fun_def {f : α → γ} {g : β → δ} {a : α} {b : β} :
+  (f × g) ⟨a, b⟩ = ⟨f a, g b⟩ :=
+by
+  rw [prod_fun]
+
+theorem copairing_left {f : α → γ} {g : β → δ} {x : α}:
+  (f ⊕ g) (.inl x) = .inl (f x) :=
+by
+  rw [copairing]
+
+theorem copairing_right {f : α → γ} {g : β → δ} {x : β}:
+  (f ⊕ g) (.inr x) = .inr (g x) :=
+by
+  rw [copairing]
+
 theorem outl_def {a : α} {b : β} :
   outl ⟨a, b⟩ = a :=
 by
