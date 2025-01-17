@@ -34,21 +34,21 @@ by
 -- Soma:
 ----------------------------------------------------------
 
-theorem Add_zero_R :
+theorem add_zero :
   ∀ (n : Nat), n + O = n :=
 by
   intro n
   rw [add]
 
-theorem Add_zero_L :
+theorem zero_add :
   ∀ (n : Nat), O + n = n :=
 by
   intro n
   induction n with
-  | O => rw [add]
+  | O => rw [add_zero]
   | S k HI => rw [add, HI]
 
-theorem Add_succ_L :
+theorem succ_add :
   ∀ (n m : Nat), (S n) + m = S (n + m) :=
 by
   intro n m
@@ -56,7 +56,7 @@ by
   | O => rw [add, add]
   | S k HI => rw [add, add, HI]
 
-theorem Add_Ass :
+theorem add_ass :
   ∀ (n m k : Nat), (n + m) + k = n + (m + k) :=
 by
   intro n m k
@@ -71,39 +71,39 @@ by
 instance : MonoidA Nat where
   opa := uncurry add
   z := O
-  opa_ass := Add_Ass
-  opa_id := Add_zero_R
-  id_opa := Add_zero_L
+  opa_ass := add_ass
+  opa_id := add_zero
+  id_opa := zero_add
 
-theorem Add_Com :
+theorem add_com :
   ∀ (n m : Nat), n + m = m + n :=
 by
   intro n m
   induction m with
-  | O => rw [add, Add_zero_L]
-  | S k HI => rw [add, HI, Add_succ_L]
+  | O => rw [add, zero_add]
+  | S k HI => rw [add, HI, succ_add]
 
-theorem Add_CanL :
+theorem cancel_add :
   ∀ (n m k : Nat), k + n = k + m → n = m :=
 by
   intro n m k h
   induction k with
-  | O => rw [Add_zero_L n, Add_zero_L m] at h
+  | O => rw [zero_add n, zero_add m] at h
          exact h
-  | S k HI => rw [Add_succ_L k n, Add_succ_L k m] at h
+  | S k HI => rw [succ_add k n, succ_add k m] at h
               exact HI (succ_inj (k + n) (k + m) h)
 
 ----------------------------------------------------------
 -- Produto:
 ----------------------------------------------------------
 
-theorem Mul_Id_R :
+theorem mul_one :
   ∀ (n : Nat), n * (S O) = n :=
 by
   intro n
-  rw [mul, mul, Add_zero_L]
+  rw [mul, mul, zero_add]
 
-theorem Mul_zero_L :
+theorem zero_mul :
   ∀ (n : Nat), O * n = O :=
 by
   intro n
@@ -111,87 +111,97 @@ by
   | O => rw [mul]
   | S k HI => rw [mul, HI, add]
 
-theorem Mul_succ_L :
+theorem succ_mul :
   ∀ (n m : Nat), (S n) * m = (n * m) + m :=
 by
   intro n m
   induction m with
   | O => rw [mul, mul, add]
   | S k HI => rw [mul, HI, mul, add,
-                  add, Add_Ass, Add_Com k n,
-                  ← Add_Ass]
+                  add, add_ass, add_com k n,
+                  ← add_ass]
 
-theorem Mul_Com :
+theorem mul_com :
   ∀ (n m : Nat), n * m = m * n :=
 by
   intro n m
   induction m with
-  | O => rw [mul, Mul_zero_L]
-  | S k HI => rw [mul, HI, Mul_succ_L]
+  | O => rw [mul, zero_mul]
+  | S k HI => rw [mul, HI, succ_mul]
 
-theorem Mul_Id_L :
+theorem one_mul :
   ∀ (n : Nat), (S O) * n = n :=
 by
   intro n
-  rw [Mul_Com, Mul_Id_R]
+  rw [mul_com, mul_one]
 
-theorem Distr_L :
+theorem distrL :
   ∀ (k n m : Nat), k * (n + m) = (k * n) + (k * m) :=
 by
   intro k n m
   induction k with
-  | O => rw [Mul_zero_L, Mul_zero_L, Mul_zero_L, add]
-  | S k HI => rw [Mul_succ_L, HI, Mul_succ_L, Mul_succ_L,
-                  Add_Ass (k * n) n (k * m + m),
-                  Add_Com n (k * m + m),
-                  Add_Ass (k * m) m n, Add_Ass,
-                  Add_Com m n]
+  | O => rw [zero_mul, zero_mul, zero_mul, add]
+  | S k HI => rw [succ_mul, HI, succ_mul, succ_mul,
+                  add_ass (k * n) n (k * m + m),
+                  add_com n (k * m + m),
+                  add_ass (k * m) m n, add_ass,
+                  add_com m n]
 
-theorem Distr_R :
+theorem distrR :
   ∀ (n m k : Nat), (n + m) * k = (n * k) + (m * k) :=
 by
   intro n m k
-  rw [Mul_Com, Mul_Com n k, Mul_Com m k, Distr_L]
+  rw [mul_com, mul_com n k, mul_com m k, distrL]
 
-theorem Mul_Ass :
+theorem mul_ass :
   ∀ (n m k : Nat), (n * m) * k = n * (m * k) :=
 by
   intro n m k
   induction k with
   | O => rw [mul, mul, mul]
-  | S k HI => rw [mul, HI, mul, Distr_L]
+  | S k HI => rw [mul, HI, mul, distrL]
+
+----------------------------------------------------------
+-- (Nat, *, SO) é um Monoid
+----------------------------------------------------------
+instance : MonoidM Nat where
+  opm := uncurry mul
+  opm_ass := mul_ass
+  e := S O
+  id_opm := one_mul
+  opm_id := mul_one
 
 ----------------------------------------------------------
 -- Exponenciação:
 ----------------------------------------------------------
 
-theorem Pow_Id_R :
+theorem pow_one :
   ∀ (n : Nat), n ^ (S O) = n :=
 by
   intro n
-  rw [pow, pow, Mul_Id_L]
+  rw [pow, pow, one_mul]
 
-theorem Pow_Add_eq_Mul_Pow :
+theorem pow_add_mul_pow :
   ∀ (n m k : Nat), n ^ (m + k) = (n ^ m) * (n ^ k) :=
 by
   intro n m k
   induction k with
-  | O => rw [add, pow, Mul_Id_R]
-  | S k HI => rw [add, pow, HI, pow, Mul_Ass]
+  | O => rw [add, pow, mul_one]
+  | S k HI => rw [add, pow, HI, pow, mul_ass]
 
-theorem Pow_Pow_eq_Pow_Mul :
+theorem pow_pow_pow_mul :
   ∀ (n m k : Nat), (n ^ m) ^ k = n ^  (m * k) :=
 by
   intro n m k
   induction k with
   | O => rw [mul, pow, pow]
-  | S k HI => rw [pow, HI, mul, Pow_Add_eq_Mul_Pow]
+  | S k HI => rw [pow, HI, mul, pow_add_mul_pow]
 
-theorem Pow_two_eq_Mul_self :
+theorem pow_two :
   ∀ (n : Nat), n ^ (S (S O)) = n * n :=
 by
   intro n
-  rw [pow, pow, pow, Mul_Id_L]
+  rw [pow, pow, pow, one_mul]
 /-
 theorem Pow_No_Id_L :
   ¬∃ (x : Nat), ∀ (n : Nat), x ^ n = n :=
@@ -205,8 +215,8 @@ by
   induction a with
   | O => rw [pow, mul] at ha
          exact zero_ne_succ (S O) ha
-  | S k HI => rw [pow, Pow_Id_R, mul, add, Mul_succ_L,
-                  ← Pow_two_eq_Mul_self] at ha
+  | S k HI => rw [pow, pow_one, mul, add, succ_mul,
+                  ← pow_two] at ha
               have ha' : (k ^ S (S O)) + k + k = S O :=
                 succ_inj ((k ^ S (S O)) + k + k) (S O) ha
               rw [] at ha'
