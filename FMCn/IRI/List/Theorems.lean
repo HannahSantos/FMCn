@@ -108,8 +108,8 @@ theorem length_concat_distr (xs ys : ‖α‖) :
   length (xs ++ ys) = length xs + length ys :=
 by
   induction xs with
-  | Nil => rw [concat, length, Add_zero_L]
-  | Cons k ks HI => rw [concat, length, HI, length, Add_succ_L]
+  | Nil => rw [concat, length, zero_add]
+  | Cons k ks HI => rw [concat, length, HI, length, succ_add]
 
 theorem reverse_concat_concat_reverse (xs ys : ‖α‖) :
   reverse (xs ++ ys) = (reverse ys) ++ (reverse xs) :=
@@ -160,15 +160,15 @@ theorem sum_concat (xs ys : ‖Nat‖) :
   sum (xs ++ ys) = sum xs + sum ys :=
 by
   induction xs with
-  | Nil => rw [concat, sum_nil, Add_zero_L]
-  | Cons k ks HI => rw [concat, sum_cons, sum_cons, HI, Add_Ass]
+  | Nil => rw [concat, sum_nil, zero_add]
+  | Cons k ks HI => rw [concat, sum_cons, sum_cons, HI, add_ass]
 
 theorem product_concat (xs ys : ‖Nat‖) :
   product (xs ++ ys) = product xs * product ys :=
 by
   induction xs with
-  | Nil => rw [concat, product_nil, Mul_Id_L]
-  | Cons k ks HI => rw [concat, product_cons, HI, product_cons, Mul_Ass]
+  | Nil => rw [concat, product_nil, one_mul]
+  | Cons k ks HI => rw [concat, product_cons, HI, product_cons, mul_ass]
 
 ------------------------------------------------
 -- Foldable Functions

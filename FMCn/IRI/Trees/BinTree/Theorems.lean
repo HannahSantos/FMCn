@@ -9,4 +9,5 @@ theorem tips_Eq_succ_nodes (t : BinTree α) :
 by
   induction t with
   | Leaf x => rw [nodes, tips]
-  | Fork l r HL HR => rw [nodes, tips, ← HL, ← HR, Add_succ_L, add]
+  | Fork l r HL HR => rw [nodes, tips, ← HL,
+                          ← HR, succ_add, add]
