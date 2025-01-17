@@ -2,6 +2,9 @@ variable {α α' β β' γ δ : Type}
 
 namespace data
 
+notation:max "𝟘" => Empty
+notation:max "𝟙" => Unit
+
 def id : α → α
   | x => x
 
@@ -48,24 +51,24 @@ def curry : (α × β → δ) → α → β → δ
 def uncurry : (α → β → δ) → α × β → δ
   | f => fun ⟨a, b⟩ => f a b
 
-def Pow_one {α : Type} : (Unit → α) → α
+def Pow_one {α : Type} : (𝟙 → α) → α
   | f => f ()
 
-def Pow_one_back {α : Type}: α → Unit → α
+def Pow_one_back {α : Type}: α → 𝟙 → α
   | a => fun () => a
 
-def Pow_two {α : Type} : (Unit ⊕ Unit → α) → α × α
+def Pow_two {α : Type} : (𝟙 ⊕ 𝟙 → α) → α × α
   | f => ⟨f (.inl ()), f (.inr ())⟩
 
-def Two_pow {α : Type} : α × α → Unit ⊕ Unit → α
+def Two_pow {α : Type} : α × α → 𝟙 ⊕ 𝟙 → α
   | ⟨a, a'⟩ => fun x => (match x with
                     | .inl _ => a
                     | .inr _ => a')
 
-def One_pow {α : Type} : (α → Unit) → Unit
+def One_pow {α : Type} : (α → 𝟙) → 𝟙
   | _ => ()
 
-def One_pow_back {α : Type} : Unit → α → Unit
+def One_pow_back {α : Type} : 𝟙 → α → 𝟙
   | _ => fun _ => ()
 
 def Distr (α β δ : Type) : δ × (α ⊕ β) → (δ × α) ⊕ (δ × β)
@@ -90,10 +93,10 @@ def Com_sum (α β : Type) : α ⊕ β → β ⊕ α
   | .inl a => .inr a
   | .inr b => .inl b
 
-def Id_sum {α : Type}: α ⊕ Empty → α
+def Id_sum {α : Type}: α ⊕ 𝟘 → α
   | .inl x => x
 
-def Sum_id {α : Type}: α → α ⊕ Empty
+def Sum_id {α : Type}: α → α ⊕ 𝟘
   | x => .inl x
 
 def Ass_prod_one { α β γ : Type} : (α × β) × γ → α × β × γ
@@ -105,8 +108,8 @@ def Ass_prod_two {α β γ : Type} : α × β × γ → (α × β) × γ
 def Com_prod (α β : Type) : α × β → β × α
   | ⟨a, b⟩ => ⟨b, a⟩
 
-def Id_prod {α : Type} : α × Unit → α
+def Id_prod {α : Type} : α × 𝟙 → α
   | ⟨a, ()⟩ => a
 
-def Prod_id {α : Type} : α → α × Unit
+def Prod_id {α : Type} : α → α × 𝟙
   | a => ⟨a, ()⟩

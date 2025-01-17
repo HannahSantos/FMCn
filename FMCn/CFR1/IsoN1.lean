@@ -9,16 +9,16 @@ open Nat
 -- iso (N + 1) N
 ------------------------------------------------
 
-def F :  Nat → Nat ⊕ Unit
-  | O =>  .inr ()
+def F :  Nat → Nat ⊕ 𝟙
+  | O => .inr ()
   | S n => .inl n
 
-def G: Nat ⊕ Unit → Nat
+def G: Nat ⊕ 𝟙 → Nat
   | .inr _ => O
   | .inl n => S n
 
 theorem iso_nat_unit:
-  (Nat ⊕ Unit) ≅ Nat :=
+  (Nat ⊕ 𝟙) ≅ Nat :=
 by
   refine ⟨G, F, ?_, ?_⟩
   · funext x

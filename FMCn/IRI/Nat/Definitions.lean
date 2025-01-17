@@ -78,11 +78,11 @@ def max₂ : Nat → Nat → Nat
   | n, .O => n
   | .S n, .S m => .S (max₂ n m)
 /-
-def div : Nat × Nat → Unit ⊕ Nat × Nat
+def div : Nat × Nat → 𝟙 ⊕ Nat × Nat
   | ⟨_, .O⟩ => .inl ()
   | ⟨n, m⟩ => if n < m then .inr ⟨.O, n⟩ else div ⟨.S (n ∸ m), m⟩
 
-def quot : Nat × Nat → Unit ⊕ Nat
+def quot : Nat × Nat → 𝟙 ⊕ Nat
   := sorry
 -/
 mutual
@@ -99,6 +99,6 @@ def Zero : Nat → Bool
   | .O => .true
   | _ => .false
 
-def stripMaybe : Nat ⊕ Unit → Nat
+def stripMaybe : Nat ⊕ 𝟙 → Nat
   | .inl n => n
   | .inr () => .O

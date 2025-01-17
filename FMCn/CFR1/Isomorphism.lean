@@ -151,23 +151,23 @@ by
 
 -----------------------Pow-Empty-----------------------
 /-
-def Pow_empty {α : Type}: (Empty → α) → Unit
+def Pow_empty {α : Type}: (𝟘 → α) → 𝟙
   | _ => ()
 
-def Empty_fun {α : Type} : Empty → α
+def Empty_fun {α : Type} : 𝟘 → α
 
-def Unit_to_pow {α : Type}: Unit → Empty → α
+def Unit_to_pow {α : Type}: 𝟙 → 𝟘 → α
   | _ => Empty_fun
 
 theorem only_one_empty_fun {α : Type}:
-  ∀ (g g' : Empty → α), g = g' :=
+  ∀ (g g' : 𝟘 → α), g = g' :=
 by
   intro g g'
   funext a
   contradiction
 
 theorem iso_eq_one {α : Type} :
-  (Empty → α) ≅ Unit :=
+  (𝟘 → α) ≅ 𝟙 :=
 by
   refine ⟨Pow_empty, Unit_to_pow, ?_, ?_⟩
   · funext ()
@@ -180,7 +180,7 @@ by
 ------------------------Pow-One------------------------
 
 theorem iso_pow_unit {α : Type}:
-  (Unit → α) ≅ α :=
+  (𝟙 → α) ≅ α :=
 by
   refine ⟨Pow_one, Pow_one_back, ?_, ?_⟩
   · funext a
@@ -191,7 +191,7 @@ by
 ------------------------Pow-Two------------------------
 
 theorem iso_pow_two {α : Type}:
-  (Unit ⊕ Unit → α) ≅ (α × α) :=
+  (𝟙 ⊕ 𝟙 → α) ≅ (α × α) :=
 by
   refine ⟨Pow_two, Two_pow, ?_, ?_⟩
   · funext w
@@ -205,7 +205,7 @@ by
 ------------------------Unit-Pow------------------------
 
 theorem iso_one_pow {α : Type}:
-  (α → Unit) ≅ Unit :=
+  (α → 𝟙) ≅ 𝟙 :=
 by
   refine ⟨One_pow, One_pow_back, ?_, ?_⟩
   · funext ()
@@ -216,14 +216,14 @@ by
 -----------------------Empty-Pow-----------------------
 
 /-theorem iso_empty_pow {α : Type}:
-  (α → Empty) ≅ Empty :=
+  (α → 𝟘) ≅ 𝟘 :=
 by
 -/
 
 --------------------Empty-Pow-Empty--------------------
 /--/
 theorem iso_empty_pow_empty:
-  (Empty → Empty) ≅ Unit :=
+  (𝟘 → 𝟘) ≅ 𝟙 :=
 by
   exact iso_eq_one
 -/
@@ -285,7 +285,7 @@ by
 -------------------------Sum-Id-------------------------
 
 theorem iso_sum_id {α : Type}:
-  (α ⊕ Empty) ≅ α :=
+  (α ⊕ 𝟘) ≅ α :=
 by
   refine ⟨Id_sum, Sum_id, ?_, ?_⟩
   · funext a
@@ -347,7 +347,7 @@ by
 -------------------------Prod-Id-------------------------
 
 theorem iso_prod_id {α : Type}:
-  (α × Unit) ≅ α :=
+  (α × 𝟙) ≅ α :=
 by
   refine ⟨Id_prod, Prod_id, ?_, ?_⟩
   · funext a
@@ -358,14 +358,14 @@ by
 ------------------------Prod-Anul------------------------
 
 /-
-def to_empty {α : Type}: α × Empty → Empty
+def to_empty {α : Type}: α × 𝟘 → Empty
   | w => w.2
 
-def from_empty {α : Type}: Empty → α × Empty
+def from_empty {α : Type}: 𝟘 → α × Empty
   | x => ⟨Empty_fun x, x⟩
 
 theorem iso_prod_anul {a : Type}:
-  (α × Empty) ≅ Empty :=
+  (α × 𝟘) ≅ 𝟘 :=
 by
   refine ⟨to_empty, from_empty, ?_, ?_⟩
   · funext x
@@ -378,9 +378,9 @@ by
 -----------------------Pow-Two-Sum-----------------------
 /-
 theorem iso_pow_two_sum {α β : Type}:
-  (Unit ⊕ Unit → α ⊕ β) ≅ (α × α ⊕ α × β ⊕ β × α ⊕ β × β) :=
+  (𝟙 ⊕ 𝟙 → α ⊕ β) ≅ (α × α ⊕ α × β ⊕ β × α ⊕ β × β) :=
 by
-  have h1: (Unit ⊕ Unit → α ⊕ β) ≅ ((α ⊕ β) × (α ⊕ β)) :=
+  have h1: (𝟙 ⊕ 𝟙 → α ⊕ β) ≅ ((α ⊕ β) × (α ⊕ β)) :=
   by
     exact iso_pow_two
   have h2: ((α ⊕ β) × (α ⊕ β)) ≅ ((α ⊕ β) × α ⊕ (α ⊕ β) × β) :=
