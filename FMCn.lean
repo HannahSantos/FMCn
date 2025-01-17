@@ -11,9 +11,11 @@ import «FMCn».CFR1.IsoN1
 import «FMCn».IEA.Magma.Definition
 import «FMCn».IEA.Semigroup.Definitions
 import «FMCn».IEA.Monoid.Definitions
-import «FMCn».IEA.Monoid.Theorems
+import «FMCn».IEA.Monoid.TheoremsA
+import «FMCn».IEA.Monoid.TheoremsM
 import «FMCn».IEA.Group.Definitions
-import «FMCn».IEA.Group.Theorems
+import «FMCn».IEA.Group.TheoremsA
+import «FMCn».IEA.Group.TheoremsM
 import «FMCn».IEA.Group.«Group-Homo»
 -- IRI
 import «FMCn».IRI.FAM.Functor.Definitions
