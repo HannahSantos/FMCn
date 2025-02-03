@@ -5,6 +5,12 @@ namespace data
 
 open Bool
 
+theorem false_neq_true :
+  .false ≠ Bool.true :=
+by
+  intro h
+  cases h
+
 theorem if_then_else_true (a a' : α) :
   (if Bool.true then a else a') = a :=
 by
