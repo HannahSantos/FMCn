@@ -89,7 +89,7 @@ def Ass_sum_two {α β γ : Type} : (α ⊕ β) ⊕ γ → α ⊕ β ⊕ γ
   | .inl (.inr b) => .inr (.inl b)
   | .inr c => .inr (.inr c)
 
-def Com_sum (α β : Type) : α ⊕ β → β ⊕ α
+def Com_sum {α β : Type} : α ⊕ β → β ⊕ α
   | .inl a => .inr a
   | .inr b => .inl b
 
@@ -105,11 +105,14 @@ def Ass_prod_one { α β γ : Type} : (α × β) × γ → α × β × γ
 def Ass_prod_two {α β γ : Type} : α × β × γ → (α × β) × γ
   | ⟨a, ⟨b, c⟩⟩ => ⟨⟨a, b⟩, c⟩
 
-def Com_prod (α β : Type) : α × β → β × α
+def Com_prod {α β : Type} : α × β → β × α
   | ⟨a, b⟩ => ⟨b, a⟩
 
 def Id_prod {α : Type} : α × 𝟙 → α
   | ⟨a, ()⟩ => a
+
+def id_prod {α : Type} : 𝟙 × α → α
+  := Id_prod ⋄ Com_prod
 
 def Prod_id {α : Type} : α → α × 𝟙
   | a => ⟨a, ()⟩
