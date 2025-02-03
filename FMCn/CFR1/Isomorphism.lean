@@ -8,7 +8,7 @@ namespace data
 ------------------------------------------------
 
 theorem iso_refl:
-  reflexive iso :=
+  (≅) é reflexiva :=
 by
   intro α
   refine ⟨id, id, ?_, ?_⟩
@@ -16,13 +16,13 @@ by
   · rw [(id_comp id).1]
 
 theorem iso_symm:
-  symmetric iso :=
+  (≅) é simétrica :=
 by
   intro α β ⟨f, g, h⟩
   refine ⟨g, f, h.2, h.1⟩
 
 theorem iso_trans:
-  transitive iso :=
+  (≅) é transitiva :=
 by
   intro α β γ ⟨f, g, h⟩ ⟨f', g', h'⟩
   refine ⟨(f' ⋄ f), (g ⋄ g'), ?_, ?_⟩
@@ -32,7 +32,7 @@ by
         h'.2, (id_comp f).1, h.2]
 
 theorem iso_eq_rel:
-  equivalent_relation iso :=
+  (≅) é uma relação de equivalência :=
 by
   refine ⟨iso_refl, iso_symm, iso_trans⟩
 
@@ -41,19 +41,19 @@ by
 ------------------------------------------------
 
 theorem iso_empty:
-  respects_empty :=
+  (≅) respeita 𝟘 :=
 by
   exact iso_refl Empty
 
 theorem iso_unit:
-  respects_unit :=
+  (≅) respeita 𝟙 :=
 by
   exact iso_refl Unit
 
 theorem iso_sum:
-  respects_sum :=
+  (≅) respeita (⊕) :=
 by
-  intro α α' β β' ⟨⟨fa, fa', ha⟩,⟨gb, gb', hb⟩⟩
+  intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨fa ⊕ gb, fa' ⊕ gb', ?_, ?_⟩
   · funext ab'
     rw [comp_def]
@@ -75,7 +75,7 @@ by
                    id_def]
 
 theorem iso_prod:
-  respects_prod :=
+  (≅) respeita (×) :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨fa × gb, fa' × gb', ?_, ?_⟩
@@ -89,7 +89,7 @@ by
         ha.2, hb.2, id_def, id_def, id_def]
 
 theorem iso_fun:
-  respects_fun :=
+  (≅) respeita (→) :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨Fun_to_fun fa' gb, Fun_to_fun fa gb', ?_, ?_⟩
@@ -105,7 +105,7 @@ by
         hb.2, (id_comp h).1, id_def]
 
 theorem iso_algebric_structure:
-  respects_algebric_structure :=
+  (≅) respeita a Estrutura Algébrica :=
 by
   refine ⟨iso_empty, iso_unit, iso_sum, iso_prod, iso_fun⟩
 
@@ -114,7 +114,7 @@ by
 ------------------------------------------------
 
 theorem iso_congruent:
-  congruent :=
+  (≅) é uma Congruência :=
 by
   refine ⟨iso_eq_rel, iso_algebric_structure⟩
 
@@ -270,7 +270,7 @@ by
 theorem iso_sum_com {α β : Type}:
   (α ⊕ β) ≅ (β ⊕ α) :=
 by
-  refine ⟨Com_sum α β, Com_sum β α, ?_, ?_⟩
+  refine ⟨Com_sum, Com_sum, ?_, ?_⟩
   · funext x
     rw [comp_def, Com_sum, Com_sum, id]
     cases x with
@@ -312,7 +312,7 @@ by
 theorem iso_prod_com {α β : Type}:
   (α × β) ≅ (β × α) :=
 by
-  refine ⟨Com_prod α β, Com_prod β α, ?_, ?_⟩
+  refine ⟨Com_prod, Com_prod, ?_, ?_⟩
   · funext w
     rw [comp_def, Com_prod, Com_prod, id]
   · funext w'
