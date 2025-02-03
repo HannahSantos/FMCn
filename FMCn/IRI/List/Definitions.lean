@@ -1,5 +1,6 @@
 import FMCn.IRI.Nat.Definitions
 import FMCn.IRI.Bool.Definitions
+import FMCn.IRI.Maybe.Definitions
 
 namespace data
 
@@ -9,11 +10,27 @@ inductive List (α : Type) where
   deriving Repr
 
 infixr:70 "∷" => List.Cons
-notation:70 "‖" α "‖" => List α
+notation:max "‖" α "‖" => List α
 notation:75 "⟦⟧" => List.Nil
 notation:80 "⟦" x "⟧" => x∷⟦⟧
 
 open List Nat
+
+-----------------------Destructors---------------------
+
+def safehead : ‖α‖ → Maybe α
+  | x∷_ => .Just x
+  | _ => .Nothing
+
+def safetail : ‖α‖ → Maybe ‖α‖
+  | ⟦⟧ => .Nothing
+  | _∷xs => .Just xs
+
+def stripMaybeL : Maybe ‖α‖ → ‖α‖
+  | .Just xs => xs
+  | .Nothing => ⟦⟧
+
+-------------------------------------------------------
 
 def Lmap : (α → β) → ‖α‖ → ‖β‖
   | _, ⟦⟧ => ⟦⟧
