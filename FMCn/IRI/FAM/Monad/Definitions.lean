@@ -9,12 +9,21 @@ class Monad (m : Type → Type) extends Applicative m where
   bind : m α → (α → m β) → m β
   kleisli_comp : (α → m β) → (β → m γ) → (α → m γ)
 
-open Monad Applicative
+open Monad Applicative Functor
 
-def bind [Monad m]: m α → (α → m β) → m β
+def bind' [Monad m]: m α → (α → m β) → m β
   | ax, f => join (pure f ⊛ ax)
 infix:75 " >>= " => Monad.bind
 
-def kleisli_comp [Monad m] : (α → m β) → (β → m γ) → (α → m γ)
+def bind'' [Monad m] : m α → (α → m β) → m β
+  | ax, f => join (fmap f ax)
+
+def join' [Monad m] : m (m α) → m α
+  | axx => axx >>= id
+
+def fmap' [Monad m] : (α → β) → m α → m β
+  | f, ax => ax >>= (pure ⋄ f)
+
+def kleisli_comp' [Monad m] : (α → m β) → (β → m γ) → (α → m γ)
   | f, g, a => f a >>= g
 infix:75 " >=> " => Monad.kleisli_comp
