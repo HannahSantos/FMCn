@@ -34,6 +34,14 @@ def transitive (R : A → A → Prop) : Prop :=
 ∀ a b c, R a b → R b c → R a c
 notation R " é transitiva" => transitive R
 
+def antisymmetric (R : A → A → Prop) : Prop :=
+∀ a b, R a b → R b a → a = b
+notation R " é antissimétrica" => antisymmetric R
+
+def total (R : A → A → Prop) : Prop :=
+∀ a b, R a b ∨ R b a
+notation R " é total" => total R
+
 def equivalent_relation (R : A → A → Prop) : Prop :=
 R é reflexiva ∧ R é simétrica ∧ R é transitiva
 notation R " é uma relação de equivalência" => equivalent_relation R
