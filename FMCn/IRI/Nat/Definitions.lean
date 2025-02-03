@@ -28,7 +28,7 @@ def pred : Nat → Nat
 
 def monus : Nat → Nat → Nat
   | .S n, .S m => monus n m
-  | _, _ => .O
+  | n, _ => n
 infix:65 " ∸ " => monus
 
 def add : Nat → Nat → Nat
@@ -77,6 +77,22 @@ def max₂ : Nat → Nat → Nat
   | .O, m => m
   | n, .O => n
   | .S n, .S m => .S (max₂ n m)
+
+def mod : Nat → Nat → Nat
+  | n, m => if n ≤ m
+            then m ∸ n
+            else n ∸ m
+
+def mod' : Nat → Nat → Nat
+  | .O, m => m
+  | n, .O => n
+  | .S n, .S m => mod' n m
+notation:70 "∣" n " − " m "∣" => mod n m
+
+open Nat
+
+#eval mod O (S (S O)) + O
+
 /-
 def div : Nat × Nat → 𝟙 ⊕ Nat × Nat
   | ⟨_, .O⟩ => .inl ()
@@ -102,3 +118,6 @@ def Zero : Nat → Bool
 def stripMaybe : Nat ⊕ 𝟙 → Nat
   | .inl n => n
   | .inr () => .O
+
+def geq (a b : Nat) : Prop := ∃ (x : Nat), b + x = a
+infix:90 " ≥ " => geq
