@@ -34,13 +34,49 @@ instance : Functor List where
   Comp_law := functor_list_comp
 
 ------------------------------------------------
--- Fun Theorems
+-- Maybe Lists Theorems
 ------------------------------------------------
+
+theorem just_eq {x y : ‖α‖} :
+  Maybe.Just x = Maybe.Just y → x = y :=
+by
+  intro h
+  have h' : stripMaybeL (Maybe.Just x) = stripMaybeL (Maybe.Just y) := univ stripMaybeL h
+  rw [stripMaybeL] at h'
+  exact h'
+
+theorem safetail_cons {x : α} {xs : ‖α‖} :
+  safetail (x∷xs) = .Just xs :=
+by
+  rw [safetail]
+
+theorem cons_inj {x y : α} {xs ys : ‖α‖} :
+  x∷xs = y∷ys → xs = ys :=
+by
+  intro h
+  have h' : safetail (x∷xs) = safetail (y∷ys) := univ safetail h
+  rw [safetail_cons, safetail_cons] at h'
+  exact just_eq h'
+
+------------------------------------------------
+-- Useful:
+------------------------------------------------
+
+theorem nil_neq_cons {x : α} {xs : ‖α‖} :
+  x∷xs ≠ ⟦⟧ :=
+by
+  intro h
+  cases h
 
 theorem reverse_nil :
   reverse (⟦⟧ : ‖α‖) = ⟦⟧ :=
 by
   rw [reverse]
+
+theorem nil_concat {l : ‖α‖} :
+  (⟦⟧ : ‖α‖) ++ l = l :=
+by
+  rw [concat]
 
 theorem concat_nil (l : ‖α‖) :
   l ++ (⟦⟧ : ‖α‖) = l :=
@@ -68,6 +104,10 @@ theorem product_cons (x : Nat) (xs : ‖Nat‖) :
   product (x∷xs) = x * product xs :=
 by
   rw [product, FoldR]
+
+------------------------------------------------
+-- Append Theorems
+------------------------------------------------
 
 theorem concat_append (x : α) (xs ys : ‖α‖) :
   ys ++ (append x xs) = append x (ys ++ xs) :=
@@ -153,7 +193,7 @@ by
 
 
 ------------------------------------------------
--- More Theorems
+-- Sum/Product-Concat Theorems
 ------------------------------------------------
 
 theorem sum_concat (xs ys : ‖Nat‖) :
@@ -201,12 +241,6 @@ by
 ------------------------------------------------
 -- zip and zipWith
 ------------------------------------------------
-
-theorem nil_neq_cons {x : α} {xs : ‖α‖} :
-  x∷xs ≠ ⟦⟧ :=
-by
-  intro h
-  cases h
 
 theorem zip_nil {xs : ‖α‖} :
   zip xs (⟦⟧ : ‖β‖) = ⟦⟧ :=
