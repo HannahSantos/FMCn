@@ -406,6 +406,17 @@ by
   · intro hpaqir hpaq
     exact ⟨hpaq.2, hpaqir hpaq⟩
 
+theorem prop_impl_True :
+  P → True :=
+by
+  intro _
+  apply True.intro
+
+theorem False_impl_prop :
+  False → P :=
+by
+  apply False.elim
+
 end propositional
 
 
