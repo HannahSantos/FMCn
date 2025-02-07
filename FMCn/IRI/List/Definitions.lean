@@ -82,7 +82,7 @@ def append : α → ‖α‖ → ‖α‖
   | n, x∷xs => x∷append n xs
 
 def append_cat : α → ‖α‖ → ‖α‖
-  | n, xs => xs ++ n∷⟦⟧
+  | n, xs => xs ++ ⟦n⟧
 
 -- esreveR...
 def reverse : ‖α‖ → ‖α‖
@@ -91,7 +91,7 @@ def reverse : ‖α‖ → ‖α‖
 
 def rev : ‖α‖ → ‖α‖
   | ⟦⟧ => ⟦⟧
-  | x∷xs => rev xs ++ x∷⟦⟧
+  | x∷xs => rev xs ++ ⟦x⟧
 
 def revcat : ‖α‖ → ‖α‖ → ‖α‖
   | ⟦⟧, ys => ys
@@ -124,7 +124,7 @@ def expNat : Nat → ‖Nat‖ → ‖Nat‖
 
 def enumTo : Nat → ‖Nat‖
   | S n => append (S n) (enumTo n)
-  | _ => O∷⟦⟧
+  | _ => ⟦O⟧
 
 def replicate : Nat → α → ‖α‖
   | O, _ => ⟦⟧
@@ -151,7 +151,7 @@ def elemIndices : Nat → ‖Nat‖ → ‖Nat‖
   | n, x∷xs => let xs' := elemIndices n xs
                if n == x then O∷addNat (S O) xs'
                else addNat (S O) xs'
-  | _, ⟦⟧ => ⟦⟧
+  | _, _ => ⟦⟧
 
 def pw : (α → β → γ) → ‖α‖ → ‖β‖ → ‖γ‖
   | op, x∷xs, y∷ys => (op x y)∷(pw op xs ys)
@@ -182,7 +182,7 @@ def isPrefixOf : ‖Nat‖ → ‖Nat‖ → Bool
   | _, _ => .false
 
 def mix : ‖α‖ → ‖α‖ → ‖α‖
-  | x∷xs, y∷ys => x∷(y∷(mix xs ys))
+  | x∷xs, y∷ys => x∷y∷mix xs ys
   | _, _ => ⟦⟧
 
 def interspace : α → ‖α‖ → ‖α‖
