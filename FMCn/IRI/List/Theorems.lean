@@ -1,4 +1,5 @@
 import FMCn.IRI.List.Definitions
+import FMCn.IRI.List.Useful
 import FMCn.IRI.Nat.Theorems
 import FMCn.IRI.FAM.Functor.Definitions
 import FMCn.IRI.FAM.Applicative.Definitions
@@ -26,7 +27,8 @@ by
   funext xs
   induction xs with
   | Nil => rw [Lmap, comp_def, Lmap, Lmap]
-  | Cons k ks HI => rw [comp_def, Lmap, Lmap, Lmap, HI, comp_def, comp_def]
+  | Cons k ks HI => rw [comp_def, Lmap, Lmap, Lmap, HI,
+                        comp_def, comp_def]
 
 instance : Functor List where
   fmap := Lmap
@@ -41,7 +43,8 @@ theorem just_eq {x y : ‖α‖} :
   Maybe.Just x = Maybe.Just y → x = y :=
 by
   intro h
-  have h' : stripMaybeL (Maybe.Just x) = stripMaybeL (Maybe.Just y) := univ stripMaybeL h
+  have h' : stripMaybeL (Maybe.Just x) = stripMaybeL (Maybe.Just y)
+    := univ stripMaybeL h
   rw [stripMaybeL] at h'
   exact h'
 
@@ -54,60 +57,22 @@ theorem cons_inj {x y : α} {xs ys : ‖α‖} :
   x∷xs = y∷ys → xs = ys :=
 by
   intro h
-  have h' : safetail (x∷xs) = safetail (y∷ys) := univ safetail h
+  have h' : safetail (x∷xs) = safetail (y∷ys)
+    := univ safetail h
   rw [safetail_cons, safetail_cons] at h'
   exact just_eq h'
 
 ------------------------------------------------
--- Useful:
-------------------------------------------------
-
-theorem nil_neq_cons {x : α} {xs : ‖α‖} :
-  x∷xs ≠ ⟦⟧ :=
-by
-  intro h
-  cases h
-
-theorem reverse_nil :
-  reverse (⟦⟧ : ‖α‖) = ⟦⟧ :=
-by
-  rw [reverse]
-
-theorem nil_concat {l : ‖α‖} :
-  (⟦⟧ : ‖α‖) ++ l = l :=
-by
-  rw [concat]
-
-theorem concat_nil (l : ‖α‖) :
-  l ++ (⟦⟧ : ‖α‖) = l :=
-by
-  induction l with
-  | Nil => rw [concat]
-  | Cons k ks HI => rw [concat, HI]
-
-theorem sum_nil :
-  sum (⟦⟧ : ‖Nat‖) = .O :=
-by
-  rw [sum, FoldR]
-
-theorem sum_cons (x : Nat) (xs : ‖Nat‖) :
-  sum (x∷xs) = x + sum xs :=
-by
-  rw [sum, FoldR]
-
-theorem product_nil :
-  product (⟦⟧ : ‖Nat‖) = .S .O :=
-by
-  rw [product, FoldR]
-
-theorem product_cons (x : Nat) (xs : ‖Nat‖) :
-  product (x∷xs) = x * product xs :=
-by
-  rw [product, FoldR]
-
-------------------------------------------------
 -- Append Theorems
 ------------------------------------------------
+
+theorem append_eq_append_cat {n : α} {xs : ‖α‖} :
+  append n xs = append_cat n xs :=
+by
+  induction xs with
+  | Nil => rw [append_nil, append_cat_nil]
+  | Cons k ks HI => rw [append_cons, HI, append_cat_def,
+                        append_cat_cons]
 
 theorem concat_append (x : α) (xs ys : ‖α‖) :
   ys ++ (append x xs) = append x (ys ++ xs) :=
@@ -121,14 +86,16 @@ theorem reverse_append (x : α) (l : ‖α‖):
 by
   induction l with
   | Nil => rw [append, reverse, reverse, reverse, append]
-  | Cons k ks HI => rw [append, reverse, HI, append, reverse]
+  | Cons k ks HI => rw [append, reverse, HI, append,
+                        reverse]
 
 theorem reverse_reverse (l : ‖α‖):
   reverse (reverse l) = l :=
 by
   induction l with
   | Nil => rw [reverse_nil, reverse_nil]
-  | Cons k ks HI => rw [reverse, reverse_append k (reverse ks), HI]
+  | Cons k ks HI => rw [reverse, reverse_append k
+                        (reverse ks), HI]
 
 theorem length_append (n : α) (l : ‖α‖):
   length (append n l) = .S (length l) :=
@@ -144,28 +111,34 @@ by
   | Nil => rw [reverse]
   | Cons k ks HI => rw [reverse, length, length_append, HI]
 
+------------------------------------------------
+-- (++) Theorems
+------------------------------------------------
+
 theorem length_concat_distr (xs ys : ‖α‖) :
   length (xs ++ ys) = length xs + length ys :=
 by
   induction xs with
   | Nil => rw [concat, length, zero_add]
-  | Cons k ks HI => rw [concat, length, HI, length, succ_add]
+  | Cons k ks HI => rw [concat, length, HI, length,
+                        succ_add]
 
-theorem reverse_concat_concat_reverse (xs ys : ‖α‖) :
+theorem reverse_concat (xs ys : ‖α‖) :
   reverse (xs ++ ys) = (reverse ys) ++ (reverse xs) :=
 by
   induction xs with
   | Nil => rw [concat, reverse, concat_nil]
-  | Cons k ks HI => rw [concat, reverse, HI, reverse, concat_append]
+  | Cons k ks HI => rw [concat, reverse, HI,
+                        reverse, concat_append]
 
 theorem addNat_distr (n : Nat) (xs ys : ‖Nat‖) :
-  addNat n (concat xs ys) = (addNat n xs) ++ (addNat n ys) :=
+  addNat n (xs ++ ys) = (addNat n xs) ++ (addNat n ys) :=
 by
   induction xs with
-  | Nil => rw [concat, addNat, Lmap, concat]
+  | Nil => rw [nil_concat, addNat, Lmap, nil_concat]
   | Cons k ks HI => rw [addNat] at HI
-                    rw [concat, addNat, Lmap,
-                        HI, Lmap, concat]
+                    rw [concat_cons, addNat, Lmap,
+                        HI, Lmap, concat_cons]
 
 theorem concat_assoc (xs ys zs : ‖α‖) :
   (xs ++ ys) ++ zs = xs ++ (ys ++ zs) :=
@@ -174,23 +147,33 @@ by
   | Nil => rw [concat, concat]
   | Cons k ks HI => rw [concat, concat, HI, concat]
 
-theorem Nil_concat_id (l : ‖α‖) :
-  (⟦⟧ : ‖α‖) ++ l = l ∧ l ++ (⟦⟧ : ‖α‖) = l :=
-by
-  refine ⟨?_, ?_⟩
-  rw [concat]
-  rw [concat_nil]
+------------------------------------------------
+-- reverse, rev and revcat
+------------------------------------------------
 
-theorem rev_to_revcat (xs : ‖α‖):
+theorem rev_reverse :
+  ∀ (xs : ‖α‖), reverse xs = rev xs :=
+by
+  intro xs
+  induction xs with
+  | Nil => rw [reverse, rev]
+  | Cons k ks HI => rw [reverse, rev, HI, append_eq_append_cat,
+                        append_cat_def]
+
+theorem rev_to_revcat {xs : ‖α‖} :
   ∀ (l : ‖α‖), (rev xs) ++ l = revcat xs l :=
 by
   induction xs with
   | Nil => intro ys
-           rw [rev, revcat, concat]
+           rw [rev_nil, revcat_nil, nil_concat]
   | Cons k ks HI => intro ys
-                    rw [rev, concat_assoc, concat,
-                        concat, HI (k∷ys), revcat]
+                    rw [rev_cons, concat_assoc, concat_cons,
+                        nil_concat, HI (k∷ys), revcat_cons]
 
+theorem rev_def {xs : ‖α‖} :
+  rev xs = revcat xs (⟦⟧) :=
+by
+  rw [← rev_to_revcat, concat_nil]
 
 ------------------------------------------------
 -- Sum/Product-Concat Theorems
@@ -200,15 +183,17 @@ theorem sum_concat (xs ys : ‖Nat‖) :
   sum (xs ++ ys) = sum xs + sum ys :=
 by
   induction xs with
-  | Nil => rw [concat, sum_nil, zero_add]
-  | Cons k ks HI => rw [concat, sum_cons, sum_cons, HI, add_ass]
+  | Nil => rw [nil_concat, sum_nil, zero_add]
+  | Cons k ks HI => rw [concat_cons, sum_cons, sum_cons,
+                        HI, add_ass]
 
 theorem product_concat (xs ys : ‖Nat‖) :
   product (xs ++ ys) = product xs * product ys :=
 by
   induction xs with
-  | Nil => rw [concat, product_nil, one_mul]
-  | Cons k ks HI => rw [concat, product_cons, HI, product_cons, mul_ass]
+  | Nil => rw [nil_concat, product_nil, one_mul]
+  | Cons k ks HI => rw [concat_cons, product_cons, HI,
+                        product_cons, mul_ass]
 
 ------------------------------------------------
 -- Foldable Functions
@@ -241,34 +226,6 @@ by
 ------------------------------------------------
 -- zip and zipWith
 ------------------------------------------------
-
-theorem zip_nil {xs : ‖α‖} :
-  zip xs (⟦⟧ : ‖β‖) = ⟦⟧ :=
-by
-  rw [zip]
-  intro _ _ _ _ _ h
-  exact (nil_neq_cons h.symm)
-
-theorem nil_zip {ys : ‖β‖} :
-  zip (⟦⟧ : ‖α‖) ys = ⟦⟧ :=
-by
-  rw [zip]
-  intro _ _ _ _ h _
-  exact (nil_neq_cons h.symm)
-
-theorem zipWith_nil {op : α → β → γ} {xs : ‖α‖} :
-  zipWith op xs (⟦⟧) = ⟦⟧ :=
-by
-  rw [zipWith]
-  intro _ _ _ _ _ h
-  exact (nil_neq_cons h.symm)
-
-theorem nil_zipWith {op : α → β → γ} {ys : ‖β‖} :
-  zipWith op (⟦⟧) ys = ⟦⟧ :=
-by
-  rw [zipWith]
-  intro _ _ _ _ h _
-  exact (nil_neq_cons h.symm)
 
 theorem zip_from_zipWith {ys : ‖β‖}:
   ∀ (xs : ‖α‖), zip xs ys = zipWith Prod.mk xs ys:=
