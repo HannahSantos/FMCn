@@ -9,19 +9,19 @@ open Nat
 -- Succ-Inj:
 ----------------------------------------------------------
 
-theorem zero_ne_succ {n : Nat}:
+theorem Nat.zero_ne_succ {n : Nat}:
   O ≠ S n :=
 by
   intro h
   cases h -- Magia?
 
-theorem pred_succ :
+theorem Nat.pred_succ :
   ∀ (n : Nat), pred (S n) = n :=
 by
   intro n
   rw [pred]
 
-theorem succ_inj {n m : Nat}:
+theorem Nat.succ_inj {n m : Nat}:
   S n = S m → n = m :=
 by
   intro h
@@ -33,13 +33,13 @@ by
 -- Add :
 ----------------------------------------------------------
 
-theorem add_zero :
+theorem Nat.add_zero :
   ∀ (n : Nat), n + O = n :=
 by
   intro n
   rw [add]
 
-theorem add_succ :
+theorem Nat.add_succ :
   ∀ (n m : Nat), n + (S m) = S (n + m) :=
 by
   intro n m
@@ -49,13 +49,13 @@ by
 -- Mul :
 ----------------------------------------------------------
 
-theorem mul_zero :
+theorem Nat.mul_zero :
   ∀ (n : Nat), n * O = O :=
 by
   intro n
   rw [mul]
 
-theorem mul_succ :
+theorem Nat.mul_succ :
   ∀ (n m : Nat), n * (S m) = (n * m) + n :=
 by
   intro n m
@@ -65,13 +65,13 @@ by
 -- Pow :
 ----------------------------------------------------------
 
-theorem pow_zero :
+theorem Nat.pow_zero :
   ∀ (n : Nat), n ^ O = S O :=
 by
   intro n
   rw [pow]
 
-theorem pow_succ :
+theorem Nat.pow_succ :
   ∀ (n m : Nat), n ^ (S m) = (n ^ m) * n :=
 by
   intro n m
@@ -81,7 +81,7 @@ by
 -- Max :
 ----------------------------------------------------------
 
-theorem max_zero {a : Nat} :
+theorem Nat.max_zero {a : Nat} :
   max₂ a O = a :=
 by
   cases a with
@@ -90,12 +90,12 @@ by
            intro h
            exact zero_ne_succ h.symm
 
-theorem zero_max {a : Nat} :
+theorem Nat.zero_max {a : Nat} :
   max₂ O a = a :=
 by
   rw [max₂]
 
-theorem max_succ {a b : Nat} :
+theorem Nat.max_succ {a b : Nat} :
   max₂ (S a) (S b) = S (max₂ a b) :=
 by
   rw [max₂]
