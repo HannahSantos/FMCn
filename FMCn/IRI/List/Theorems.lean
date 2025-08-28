@@ -7,14 +7,14 @@ import FMCn.CFR1.Useful
 import FMCn.IRI.Bool.Definitions
 import FMCn.IRI.Bool.Theorems
 
-namespace data
+namespace data.List
 
 ------------------------------------------------
 -- List is a Functor
 ------------------------------------------------
 
 theorem functor_list_id :
-  ∀ (xs : ‖α‖), (Lmap id) xs = id xs:=
+  ∀ (xs : ⟦α⟧), (Lmap id) xs = id xs:=
 by
   intro xs
   induction xs with
@@ -39,7 +39,7 @@ instance : Functor List where
 -- Maybe Lists Theorems
 ------------------------------------------------
 
-theorem just_eq {x y : ‖α‖} :
+theorem just_eq {x y : ⟦α⟧} :
   Maybe.Just x = Maybe.Just y → x = y :=
 by
   intro h
@@ -48,12 +48,12 @@ by
   rw [stripMaybeL] at h'
   exact h'
 
-theorem safetail_cons {x : α} {xs : ‖α‖} :
+theorem safetail_cons {x : α} {xs : ⟦α⟧} :
   safetail (x∷xs) = .Just xs :=
 by
   rw [safetail]
 
-theorem cons_inj {x y : α} {xs ys : ‖α‖} :
+theorem cons_inj {x y : α} {xs ys : ⟦α⟧} :
   x∷xs = y∷ys → xs = ys :=
 by
   intro h
@@ -66,7 +66,7 @@ by
 -- Append Theorems
 ------------------------------------------------
 
-theorem append_eq_append_cat {n : α} {xs : ‖α‖} :
+theorem append_eq_append_cat {n : α} {xs : ⟦α⟧} :
   append n xs = append_cat n xs :=
 by
   induction xs with
@@ -74,14 +74,14 @@ by
   | Cons k ks HI => rw [append_cons, HI, append_cat_def,
                         append_cat_cons]
 
-theorem concat_append (x : α) (xs ys : ‖α‖) :
+theorem concat_append (x : α) (xs ys : ⟦α⟧) :
   ys ++ (append x xs) = append x (ys ++ xs) :=
 by
   induction ys with
   | Nil => rw [concat, concat]
   | Cons k ks HI => rw [concat, HI, concat, append]
 
-theorem reverse_append (x : α) (l : ‖α‖):
+theorem reverse_append (x : α) (l : ⟦α⟧):
   reverse (append x l) = x∷reverse l :=
 by
   induction l with
@@ -89,7 +89,7 @@ by
   | Cons k ks HI => rw [append, reverse, HI, append,
                         reverse]
 
-theorem reverse_reverse (l : ‖α‖):
+theorem reverse_reverse (l : ⟦α⟧):
   reverse (reverse l) = l :=
 by
   induction l with
@@ -97,14 +97,14 @@ by
   | Cons k ks HI => rw [reverse, reverse_append k
                         (reverse ks), HI]
 
-theorem length_append (n : α) (l : ‖α‖):
+theorem length_append (n : α) (l : ⟦α⟧):
   length (append n l) = .S (length l) :=
 by
   induction l with
   | Nil => rw [append, length, length, length]
   | Cons k ks HI => rw [append, length, HI, length]
 
-theorem length_reverse (l : ‖α‖):
+theorem length_reverse (l : ⟦α⟧):
   length (reverse l) = length l :=
 by
   induction l with
@@ -115,15 +115,15 @@ by
 -- (++) Theorems
 ------------------------------------------------
 
-theorem length_concat_distr (xs ys : ‖α‖) :
+theorem length_concat_distr (xs ys : ⟦α⟧) :
   length (xs ++ ys) = length xs + length ys :=
 by
   induction xs with
-  | Nil => rw [concat, length, zero_add]
+  | Nil => rw [concat, length, Nat.zero_add]
   | Cons k ks HI => rw [concat, length, HI, length,
-                        succ_add]
+                        Nat.succ_add]
 
-theorem reverse_concat (xs ys : ‖α‖) :
+theorem reverse_concat (xs ys : ⟦α⟧) :
   reverse (xs ++ ys) = (reverse ys) ++ (reverse xs) :=
 by
   induction xs with
@@ -131,7 +131,7 @@ by
   | Cons k ks HI => rw [concat, reverse, HI,
                         reverse, concat_append]
 
-theorem addNat_distr (n : Nat) (xs ys : ‖Nat‖) :
+theorem addNat_distr (n : Nat) (xs ys : ⟦Nat⟧) :
   addNat n (xs ++ ys) = (addNat n xs) ++ (addNat n ys) :=
 by
   induction xs with
@@ -140,7 +140,7 @@ by
                     rw [concat_cons, addNat, Lmap,
                         HI, Lmap, concat_cons]
 
-theorem concat_assoc (xs ys zs : ‖α‖) :
+theorem concat_assoc (xs ys zs : ⟦α⟧) :
   (xs ++ ys) ++ zs = xs ++ (ys ++ zs) :=
 by
   induction xs with
@@ -152,7 +152,7 @@ by
 ------------------------------------------------
 
 theorem rev_reverse :
-  ∀ (xs : ‖α‖), reverse xs = rev xs :=
+  ∀ (xs : ⟦α⟧), reverse xs = rev xs :=
 by
   intro xs
   induction xs with
@@ -160,8 +160,8 @@ by
   | Cons k ks HI => rw [reverse, rev, HI, append_eq_append_cat,
                         append_cat_def]
 
-theorem rev_to_revcat {xs : ‖α‖} :
-  ∀ (l : ‖α‖), (rev xs) ++ l = revcat xs l :=
+theorem rev_to_revcat {xs : ⟦α⟧} :
+  ∀ (l : ⟦α⟧), (rev xs) ++ l = revcat xs l :=
 by
   induction xs with
   | Nil => intro ys
@@ -170,7 +170,7 @@ by
                     rw [rev_cons, concat_assoc, concat_cons,
                         nil_concat, HI (k∷ys), revcat_cons]
 
-theorem rev_def {xs : ‖α‖} :
+theorem rev_def {xs : ⟦α⟧} :
   rev xs = revcat xs (⟦⟧) :=
 by
   rw [← rev_to_revcat, concat_nil]
@@ -179,21 +179,21 @@ by
 -- Sum/Product-Concat Theorems
 ------------------------------------------------
 
-theorem sum_concat (xs ys : ‖Nat‖) :
+theorem sum_concat (xs ys : ⟦Nat⟧) :
   sum (xs ++ ys) = sum xs + sum ys :=
 by
   induction xs with
-  | Nil => rw [nil_concat, sum_nil, zero_add]
+  | Nil => rw [nil_concat, sum_nil, Nat.zero_add]
   | Cons k ks HI => rw [concat_cons, sum_cons, sum_cons,
-                        HI, add_ass]
+                        HI, Nat.add_ass]
 
-theorem product_concat (xs ys : ‖Nat‖) :
+theorem product_concat (xs ys : ⟦Nat⟧) :
   product (xs ++ ys) = product xs * product ys :=
 by
   induction xs with
-  | Nil => rw [nil_concat, product_nil, one_mul]
+  | Nil => rw [nil_concat, product_nil, Nat.one_mul]
   | Cons k ks HI => rw [concat_cons, product_cons, HI,
-                        product_cons, mul_ass]
+                        product_cons, Nat.mul_ass]
 
 ------------------------------------------------
 -- Foldable Functions
@@ -227,8 +227,8 @@ by
 -- zip and zipWith
 ------------------------------------------------
 
-theorem zip_from_zipWith {ys : ‖β‖}:
-  ∀ (xs : ‖α‖), zip xs ys = zipWith Prod.mk xs ys:=
+theorem zip_from_zipWith {ys : ⟦β⟧}:
+  ∀ (xs : ⟦α⟧), zip xs ys = zipWith Prod.mk xs ys:=
 by
   induction ys with
   | Nil => intro _
@@ -239,8 +239,8 @@ by
       | Nil => rw [nil_zip, nil_zipWith]
       | Cons k' ks' => rw [zip, HI ks', zipWith]
 
-theorem zipWith_from_zip {op : α → β → γ} {ys : ‖β‖}:
-  ∀ (xs : ‖α‖), zipWith op xs ys = (Lmap (uncurry op) ⋄ zip xs) ys:=
+theorem zipWith_from_zip {op : α → β → γ} {ys : ⟦β⟧}:
+  ∀ (xs : ⟦α⟧), zipWith op xs ys = (Lmap (uncurry op) ⋄ zip xs) ys:=
 by
   induction ys with
   | Nil => intro _
