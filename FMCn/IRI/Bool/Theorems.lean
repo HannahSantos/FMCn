@@ -1,9 +1,7 @@
 import FMCn.CFR1.Useful
 import FMCn.IRI.Bool.Definitions
 
-namespace data
-
-open Bool
+namespace data.Bool
 
 theorem false_neq_true :
   .false ≠ Bool.true :=
@@ -30,13 +28,14 @@ theorem not_false :
   not false = .true :=
 by
   rw [not]
+  exact false_neq_true
 
 theorem not_not_eq_id (b : Bool) :
   not (not b) = b :=
 by
   cases b with
-  | true => rw [not, not]
-  | false => rw [not, not]
+  | true => rw [not_true, not_false]
+  | false => rw [not_false, not_true]
 
 theorem and_id (b : Bool) :
   b and true = b ∧ true and b = b :=
