@@ -17,31 +17,31 @@ by
 ----------------------------------------------------------
 
 theorem weaken_disj_right :
-  P → (P∨Q)  :=
+  P → (P ∨ Q)  :=
 by
   intro p
   apply Or.inl p
 
 theorem weaken_disj_left :
-  Q → (P∨Q)  :=
+  Q → (P ∨ Q)  :=
 by
   intro q
   apply Or.inr q
 
 theorem weaken_conj_right :
-  (P∧Q) → P  :=
+  (P ∧ Q) → P  :=
 by
   intro hpaq
   exact hpaq.1
 
 theorem weaken_conj_left :
-  (P∧Q) → Q  :=
+  (P ∧ Q) → Q  :=
 by
   intro hpaq
   exact hpaq.2
 
 theorem conj_idempot :
-  (P∧P) ↔ P :=
+  (P ∧ P) ↔ P :=
 by
   apply Iff.intro
   · exact weaken_conj_left P P
@@ -49,7 +49,7 @@ by
     apply And.intro p p
 
 theorem disj_idempot :
-  (P∨P) ↔ P  :=
+  (P ∨ P) ↔ P  :=
 by
   apply Iff.intro
   · intro hpop
@@ -210,7 +210,7 @@ by
 ----------------------------------------------------------
 
 theorem disj_as_negconj :
-  P∨Q → ¬(¬P∧¬Q)  :=
+  P ∨ Q → ¬(¬P ∧ ¬Q)  :=
 by
   intro hpoq hnpanq
   apply hpoq.elim
@@ -220,7 +220,7 @@ by
     exact hnpanq.2 q
 
 theorem conj_as_negdisj :
-  P∧Q → ¬(¬P∨¬Q)  :=
+  P ∧ Q → ¬(¬P ∨ ¬Q)  :=
 by
   intro hpaq hnponq
   apply hnponq.elim
@@ -234,7 +234,7 @@ by
 ----------------------------------------------------------
 
 theorem demorgan_disj :
-  ¬(P∨Q) → (¬P ∧ ¬Q)  :=
+  ¬(P ∨ Q) → (¬P ∧ ¬Q)  :=
 by
   intro nhpoq
   apply And.intro
@@ -246,7 +246,7 @@ by
     · exact weaken_disj_left P Q q
 
 theorem demorgan_disj_converse :
-  (¬P ∧ ¬Q) → ¬(P∨Q)  :=
+  (¬P ∧ ¬Q) → ¬(P ∨ Q)  :=
 by
   intro hnpanq hpoq
   apply hpoq.elim
@@ -256,7 +256,7 @@ by
     exact hnpanq.2 q
 
 theorem demorgan_conj :
-  ¬(P∧Q) → (¬Q ∨ ¬P)  :=
+  ¬(P ∧ Q) → (¬Q ∨ ¬P)  :=
 by
   intro nhpaq
   by_cases p : P
@@ -267,7 +267,7 @@ by
     exact p
 
 theorem demorgan_conj_converse :
-  (¬Q ∨ ¬P) → ¬(P∧Q)  :=
+  (¬Q ∨ ¬P) → ¬(P ∧ Q)  :=
 by
   intro hnqonp hpaq
   apply hnqonp.elim
@@ -277,12 +277,12 @@ by
     exact np hpaq.1
 
 theorem demorgan_conj_law :
-  ¬(P∧Q) ↔ (¬Q ∨ ¬P)  :=
+  ¬(P ∧ Q) ↔ (¬Q ∨ ¬P)  :=
 by
   refine ⟨demorgan_conj P Q, demorgan_conj_converse P Q⟩
 
 theorem demorgan_disj_law :
-  ¬(P∨Q) ↔ (¬P ∧ ¬Q)  :=
+  ¬(P ∨ Q) ↔ (¬P ∧ ¬Q)  :=
 by
   refine ⟨demorgan_disj P Q, demorgan_disj_converse P Q⟩
 
@@ -334,7 +334,7 @@ by
 ----------------------------------------------------------
 
 theorem distr_conj_disj :
-  P∧(Q∨R) → (P∧Q)∨(P∧R)  :=
+  P ∧ (Q ∨ R) → (P ∧ Q) ∨ (P ∧ R)  :=
 by
   intro hpa_qor
   apply hpa_qor.2.elim
@@ -344,7 +344,7 @@ by
     apply Or.inr ⟨hpa_qor.1, r⟩
 
 theorem distr_conj_disj_converse :
-  (P∧Q)∨(P∧R) → P∧(Q∨R)  :=
+  (P ∧ Q) ∨ (P ∧ R) → P ∧ (Q ∨ R)  :=
 by
   intro hpaqopar
   apply hpaqopar.elim
@@ -354,7 +354,7 @@ by
     refine ⟨hpar.1, Or.inr hpar.2⟩
 
 theorem distr_disj_conj :
-  P∨(Q∧R) → (P∨Q)∧(P∨R)  :=
+  P ∨ (Q ∧ R) → (P ∨ Q) ∧ (P ∨ R)  :=
 by
   intro hpo_qar
   apply hpo_qar.elim
@@ -364,7 +364,7 @@ by
     refine ⟨Or.inr hqar.1, Or.inr hqar.2⟩
 
 theorem distr_disj_conj_converse :
-  (P∨Q)∧(P∨R) → P∨(Q∧R)  :=
+  (P ∨ Q) ∧ (P ∨ R) → P ∨ (Q ∧ R)  :=
 by
   intro hpoq_a_por
   apply hpoq_a_por.1.elim
@@ -382,13 +382,13 @@ by
 ----------------------------------------------------------
 
 theorem curry_prop :
-  ((P∧Q)→R) → (P→(Q→R))  :=
+  ((P ∧ Q) → R) → (P → (Q → R))  :=
 by
   intro hpaqir p q
   exact hpaqir ⟨p, q⟩
 
 theorem uncurry_prop :
-  (P→(Q→R)) → ((P∧Q)→R)  :=
+  (P → (Q → R)) → ((P ∧ Q) → R)  :=
 by
   intro hpiqir hpaq
   exact hpiqir hpaq.1 hpaq.2
@@ -398,7 +398,7 @@ by
 ----------------------------------------------------------
 
 theorem impl_conj_impl_iff :
-  (P∧Q → Q∧R) ↔ (P∧Q → R) :=
+  (P ∧ Q → Q ∧ R) ↔ (P ∧ Q → R) :=
 by
   refine ⟨?_, ?_⟩
   · intro hpaqiqar hpaq
