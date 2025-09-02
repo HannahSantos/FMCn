@@ -6,47 +6,47 @@ inductive Bool where
   | true : Bool
   | false : Bool
 
-def fromBool : Bool → String
+def Bool.fromBool : Bool → String
   | .true => "true"
   | .false => "false"
 
 instance : Repr Bool where
   reprPrec
-    | b, _ => Std.Format.text (fromBool b)
+    | b, _ => Std.Format.text (Bool.fromBool b)
 
-def band : Bool → Bool → Bool
+def Bool.band : Bool → Bool → Bool
   | .true, .true => .true
   | _, _ => .false
-infixl:60 " and " => band
+infixl:60 " and " => Bool.band
 
-def bor : Bool → Bool → Bool
+def Bool.bor : Bool → Bool → Bool
   | .false, .false => .false
   | _, _ => .true
-infixl:55 " or " => bor
+infixl:55 " or " => Bool.bor
 
-def bxor : Bool → Bool → Bool
+def Bool.bxor : Bool → Bool → Bool
   | .true, .false => .true
   | .false, .true => .true
   | _, _ => .false
-infixl:60 " xor " => bxor
+infixl:60 " xor " => Bool.bxor
 
-def not : Bool → Bool
+def Bool.not : Bool → Bool
   | .true => .false
   | _ => .true
 
-def bnand : Bool → Bool → Bool
+def Bool.bnand : Bool → Bool → Bool
   := curry (not ⋄ uncurry band)
-infixl:60 " nand " => bnand
+infixl:60 " nand " => Bool.bnand
 
-def bnor : Bool → Bool → Bool
+def Bool.bnor : Bool → Bool → Bool
   := curry (not ⋄ uncurry bor)
-infixl:60 " nor " => bnor
+infixl:60 " nor " => Bool.bnor
 
 def bxnor : Bool → Bool → Bool
-  := curry (not ⋄ uncurry bxor)
+  := curry (Bool.not ⋄ uncurry Bool.bxor)
 infixl:60 " xnor " => bxnor
 
-def if_then_else : Bool → α → α → α
+def Bool.if_then_else : Bool → α → α → α
   | .true, a, _ => a
   | .false, _, a => a
-notation:max "if " b " then " x " else " y => if_then_else b x y
+notation:max "if " b " then " x " else " y => Bool.if_then_else b x y
