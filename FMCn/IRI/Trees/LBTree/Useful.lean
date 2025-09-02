@@ -23,12 +23,12 @@ by
 -- Flatten' :
 -----------------------------------------------------------
 
-theorem flatten'_tip {a : α} {xs : ‖α ⊕ β‖} :
+theorem flatten'_tip {a : α} {xs : ⟦α ⊕ β⟧} :
   flatten' (Tip a : LBTree α β) xs = .inl a∷xs :=
 by
   rw [flatten']
 
-theorem flatten'_fork {b : β} {l r : LBTree α β} {xs : ‖α ⊕ β‖} :
+theorem flatten'_fork {b : β} {l r : LBTree α β} {xs : ⟦α ⊕ β⟧} :
   flatten' (Fork b l r) xs = flatten' l (.inr b∷flatten' r xs) :=
 by
   rw [flatten']
