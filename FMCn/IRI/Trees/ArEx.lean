@@ -16,7 +16,7 @@ def eval : ArEx → Int
   | .Atom s => s
 
 def height : ArEx → Nat
-  | .Plus s t => max₂ (height s) (height t)
-  | .Times s t => max₂ (height s) (height t)
+  | .Plus s t => Nat.max₂ (height s) (height t)
+  | .Times s t => Nat.max₂ (height s) (height t)
   | .Neg s => .S (height s)
   | .Atom _ => .O
