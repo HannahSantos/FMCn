@@ -27,7 +27,7 @@ by
   exact h1
 
 theorem Idm_Exists_for_all [GroupM G] (i : G):
-  (∃ (x : G), i ⋆ x = x ∧ x ⋆ i = x) → i é a (⋆)-identidade :=
+  (∃ (x : G), i ⋆ x = x ∧ x ⋆ i = x) → i is_(⋆)-id :=
 by
   intro h
   apply h.elim
@@ -41,7 +41,7 @@ by
     rw [← opm_ass, h2]
 
 theorem Idempot_means_idm [GroupM G] (a : G) :
-  a ⋆ a = a → a é a (⋆)-identidade :=
+  a ⋆ a = a → a is_(⋆)-id :=
 by
   intro h
   refine ⟨?_, ?_⟩
@@ -132,7 +132,7 @@ theorem Invm_Invm [GroupM G] :
   ∀ (a : G), (a⁻¹)⁻¹ = a :=
 by
   intro a
-  suffices h : (a⁻¹)⁻¹ é o (⋆)-inverso de a⁻¹ from Opm_Only_Res_L a⁻¹ (a⁻¹)⁻¹ a ⟨h.1, opm_minv a⟩
+  suffices h : (a⁻¹)⁻¹ is_(⋆)-invOf a⁻¹ from Opm_Only_Res_L a⁻¹ (a⁻¹)⁻¹ a ⟨h.1, opm_minv a⟩
   refine ⟨?_, ?_⟩
   · rw [minv_opm]
   · rw [opm_minv]
@@ -140,7 +140,7 @@ by
 theorem Invm_Idm [GroupM G] :
   e⁻¹ = (e : G) :=
 by
-  suffices h : e⁻¹ é a (⋆)-identidade from Opm_Only_Id e⁻¹ e ⟨h, ⟨opm_id, id_opm⟩⟩
+  suffices h : e⁻¹ is_(⋆)-id from Opm_Only_Id e⁻¹ e ⟨h, ⟨opm_id, id_opm⟩⟩
   refine ⟨?_, ?_⟩
   · intro a
     rw [← opm_id a, opm_ass, opm_minv]
@@ -151,7 +151,7 @@ theorem Invm_Opm [GroupM G] :
   ∀ (a b : G), (a ⋆ b)⁻¹ = b⁻¹ ⋆ a⁻¹ :=
 by
   intro a b
-  suffices h : (b⁻¹ ⋆ a⁻¹) é o (⋆)-inverso de (a ⋆ b) from (Cheap_Invm_R (a ⋆ b) (b⁻¹ ⋆ a⁻¹) h.2).symm
+  suffices h : (b⁻¹ ⋆ a⁻¹) is_(⋆)-invOf (a ⋆ b) from (Cheap_Invm_R (a ⋆ b) (b⁻¹ ⋆ a⁻¹) h.2).symm
   refine ⟨?_, ?_⟩
   · rw [opm_ass, ← opm_ass a⁻¹ a b, minv_opm, id_opm, minv_opm]
   · rw [opm_ass, ← opm_ass b b⁻¹ a⁻¹, opm_minv, id_opm, opm_minv]
@@ -171,7 +171,7 @@ theorem Opm_Pow_Inv [GroupM G] :
   ∀ (a : G) (n : Nat), (a ↑ᴿ n)⁻¹ = a⁻¹ ↑ᴿ n :=
 by
   intro a n
-  suffices h : (a⁻¹ ↑ᴿ n) é o (⋆)-inverso de (a ↑ᴿ n) from (Cheap_Invm_L (a ↑ᴿ n) (a⁻¹ ↑ᴿ n) h.1).symm
+  suffices h : (a⁻¹ ↑ᴿ n) is_(⋆)-invOf (a ↑ᴿ n) from (Cheap_Invm_L (a ↑ᴿ n) (a⁻¹ ↑ᴿ n) h.1).symm
   refine ⟨?_, ?_⟩
   · induction n with
     | zero => rw [PowM_R, PowM_R, opm_id]
@@ -182,7 +182,7 @@ by
     | succ k HI => rw [PowM_R, PowM_R, Opm_PowM_R, opm_ass,
                        ← opm_ass a a⁻¹ (a⁻¹ ↑ᴿ k), opm_minv, id_opm, HI]
 
-notation:65 a:65 " ↑ᴿ -" n:66 => (a⁻¹) ↑ᴿ n
+notation:65 a:65 " ↑ᴿ-" n:66 => (a⁻¹) ↑ᴿ n
 
 ------------------------------------------------
 -- SubGroupMs :

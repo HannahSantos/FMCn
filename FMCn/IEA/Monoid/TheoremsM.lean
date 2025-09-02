@@ -3,7 +3,7 @@ import FMCn.IEA.Monoid.Definitions
 open MagmaM SemigroupM MonoidM
 
 theorem Opm_Only_Id [MonoidM M] :
-  ∀ (u v : M), u é a (⋆)-identidade ∧ v é a (⋆)-identidade → u = v :=
+  ∀ (u v : M), u is_(⋆)-id ∧ v is_(⋆)-id → u = v :=
 by
   intro u v ⟨Hu, Hv⟩
   have huid : v ⋆ u = v ∧ u ⋆ v = v := by

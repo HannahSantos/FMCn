@@ -27,7 +27,7 @@ by
   exact h1
 
 theorem Ida_Exists_for_all [GroupA G] (i : G):
-  (∃ (x : G), i ⊹ x = x ∧ x ⊹ i = x) → i é a (⊹)-identidade :=
+  (∃ (x : G), i ⊹ x = x ∧ x ⊹ i = x) → i is_(⊹)-id :=
 by
   intro h
   apply h.elim
@@ -41,7 +41,7 @@ by
     rw [← opa_ass, h2]
 
 theorem Idempot_means_ida [GroupA G] (a : G) :
-  a ⊹ a = a → a é a (⊹)-identidade :=
+  a ⊹ a = a → a is_(⊹)-id :=
 by
   intro h
   refine ⟨?_, ?_⟩
@@ -132,7 +132,7 @@ theorem Inva_Inva [GroupA G] :
   ∀ (a : G), −(−a) = a :=
 by
   intro a
-  suffices h : −(−a) é o (⊹)-inverso de −a from Opa_Only_Res_L (−a) (−(−a)) a ⟨h.1, opa_ainv a⟩
+  suffices h : −(−a) is_(⊹)-invOf −a from Opa_Only_Res_L (−a) (−(−a)) a ⟨h.1, opa_ainv a⟩
   refine ⟨?_, ?_⟩
   · rw [ainv_opa]
   · rw [opa_ainv]
@@ -140,7 +140,7 @@ by
 theorem Inva_Ida [GroupA G] :
   −z = (z : G) :=
 by
-  suffices h : −z é a (⊹)-identidade from Opa_Only_Id (−z) z ⟨h, ⟨opa_id, id_opa⟩⟩
+  suffices h : −z is_(⊹)-id from Opa_Only_Id (−z) z ⟨h, ⟨opa_id, id_opa⟩⟩
   refine ⟨?_, ?_⟩
   · intro a
     rw [← opa_id a, opa_ass, opa_ainv]
@@ -151,7 +151,7 @@ theorem Inva_Opa [GroupA G] :
   ∀ (a b : G), −(a ⊹ b) = −b ⊹ −a :=
 by
   intro a b
-  suffices h : (−b ⊹ −a) é o (⊹)-inverso de (a ⊹ b) from (Cheap_Inva_R (a ⊹ b) (−b ⊹ −a) h.2).symm
+  suffices h : (−b ⊹ −a) is_(⊹)-invOf (a ⊹ b) from (Cheap_Inva_R (a ⊹ b) (−b ⊹ −a) h.2).symm
   refine ⟨?_, ?_⟩
   · rw [opa_ass, ← opa_ass (−a) a b, ainv_opa, id_opa, ainv_opa]
   · rw [opa_ass, ← opa_ass b (−b) (−a), opa_ainv, id_opa, opa_ainv]
@@ -171,7 +171,7 @@ theorem Opa_Pow_Inv [GroupA G] :
   ∀ (a : G) (n : Nat), −(a ^ᴿ n) = −a ^ᴿ n :=
 by
   intro a n
-  suffices h : (−a ^ᴿ n) é o (⊹)-inverso de (a ^ᴿ n) from (Cheap_Inva_L (a ^ᴿ n) (−a ^ᴿ n) h.1).symm
+  suffices h : (−a ^ᴿ n) is_(⊹)-invOf (a ^ᴿ n) from (Cheap_Inva_L (a ^ᴿ n) (−a ^ᴿ n) h.1).symm
   refine ⟨?_, ?_⟩
   · induction n with
     | zero => rw [PowA_R, PowA_R, opa_id]
@@ -182,4 +182,4 @@ by
     | succ k HI => rw [PowA_R, PowA_R, Opa_PowA_R, opa_ass,
                        ← opa_ass a (−a) (−a ^ᴿ k), opa_ainv, id_opa, HI]
 
-notation:65 a:65 " ^ᴿ −" n:66 => (−a) ^ᴿ n
+notation:65 a:65 " ^ᴿ−" n:66 => (−a) ^ᴿ n
