@@ -325,7 +325,7 @@ by
   refine ⟨(y + x), hyx⟩
 
 theorem Nat.geq_antisymm :
-  geq is_antisymn :=
+  geq is_antisymm :=
 by
   intro a b hab hba
   apply hab.elim
@@ -444,7 +444,7 @@ by
            · intro h
              exact False.elim (zero_ne_geq_succ h)
            · intro h
-             exact False.elim (false_neq_true h)
+             exact False.elim (Bool.false_neq_true h)
            intro h
            exact zero_ne_succ h.symm
     | S a => rw [leq]
