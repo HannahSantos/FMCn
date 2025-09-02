@@ -2,7 +2,6 @@ import FMCn.IRI.List.Definitions
 import FMCn.IRI.List.Useful
 import FMCn.IRI.Nat.Theorems
 import FMCn.IRI.FAM.Functor.Definitions
-import FMCn.IRI.FAM.Applicative.Definitions
 import FMCn.CFR1.Useful
 import FMCn.IRI.Bool.Definitions
 import FMCn.IRI.Bool.Theorems
@@ -200,7 +199,7 @@ by
 ------------------------------------------------
 
 theorem Any_to_FoldR (p : α → Bool) :
-  Any p = FoldR (bor ⋄ p) .false :=
+  Any p = FoldR (Bool.bor ⋄ p) .false :=
 by
   funext xs
   induction xs with
@@ -208,7 +207,7 @@ by
   | Cons k ks HI => rw [Any, HI, FoldR, comp_def]
 
 theorem All_to_FoldR (p : α → Bool) :
-  All p = FoldR (band ⋄ p) .true :=
+  All p = FoldR (Bool.band ⋄ p) .true :=
 by
   funext xs
   induction xs with
