@@ -22,12 +22,12 @@ theorem iso_nat_unit:
 by
   refine ⟨G, F, ?_, ?_⟩
   · funext x
-    rw [comp_def, F, G]
+    rw [comp_def]
     cases x with
     | O => rfl
     | S n => rfl
   · funext y
-    rw [comp_def, G, F]
+    rw [comp_def]
     cases y with
     | inl n => rfl
-    | inr unit => rfl
+    | inr _ => rfl
