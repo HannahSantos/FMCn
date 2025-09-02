@@ -8,7 +8,7 @@ namespace data
 ------------------------------------------------
 
 theorem iso_refl:
-  (≅) é reflexiva :=
+  (≅) is_refl :=
 by
   intro α
   refine ⟨id, id, ?_, ?_⟩
@@ -16,13 +16,13 @@ by
   · rw [(id_comp id).1]
 
 theorem iso_symm:
-  (≅) é simétrica :=
+  (≅) is_symm :=
 by
   intro α β ⟨f, g, h⟩
   refine ⟨g, f, h.2, h.1⟩
 
 theorem iso_trans:
-  (≅) é transitiva :=
+  (≅) is_trans :=
 by
   intro α β γ ⟨f, g, h⟩ ⟨f', g', h'⟩
   refine ⟨(f' ⋄ f), (g ⋄ g'), ?_, ?_⟩
@@ -31,8 +31,11 @@ by
   · rw [comp_assoc, ← comp_assoc f f' g',
         h'.2, (id_comp f).1, h.2]
 
+instance : Trans iso iso iso where
+  trans := by apply iso_trans
+
 theorem iso_eq_rel:
-  (≅) é uma relação de equivalência :=
+  (≅) is_equivRel :=
 by
   refine ⟨iso_refl, iso_symm, iso_trans⟩
 
@@ -41,17 +44,17 @@ by
 ------------------------------------------------
 
 theorem iso_empty:
-  (≅) respeita 𝟘 :=
+  (≅)-resp𝟘 :=
 by
   exact iso_refl Empty
 
 theorem iso_unit:
-  (≅) respeita 𝟙 :=
+  (≅)-resp𝟙 :=
 by
   exact iso_refl Unit
 
 theorem iso_sum:
-  (≅) respeita (⊕) :=
+  (≅)-resp(⊕) :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨fa ⊕ gb, fa' ⊕ gb', ?_, ?_⟩
@@ -75,7 +78,7 @@ by
                    id_def]
 
 theorem iso_prod:
-  (≅) respeita (×) :=
+  (≅)-resp(×) :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨fa × gb, fa' × gb', ?_, ?_⟩
@@ -89,7 +92,7 @@ by
         ha.2, hb.2, id_def, id_def, id_def]
 
 theorem iso_fun:
-  (≅) respeita (→) :=
+  (≅)-resp(→) :=
 by
   intro α α' β β' ⟨⟨fa, fa', ha⟩, ⟨gb, gb', hb⟩⟩
   refine ⟨Fun_to_fun fa' gb, Fun_to_fun fa gb', ?_, ?_⟩
@@ -105,7 +108,7 @@ by
         hb.2, (id_comp h).1, id_def]
 
 theorem iso_algebric_structure:
-  (≅) respeita a Estrutura Algébrica :=
+  (≅)-respAlgebStruct :=
 by
   refine ⟨iso_empty, iso_unit, iso_sum, iso_prod, iso_fun⟩
 
@@ -114,7 +117,7 @@ by
 ------------------------------------------------
 
 theorem iso_congruent:
-  (≅) é uma Congruência :=
+  (≅)-isCongr :=
 by
   refine ⟨iso_eq_rel, iso_algebric_structure⟩
 
@@ -150,14 +153,6 @@ by
     rw [comp_def, uncurry, curry, id_def]
 
 -----------------------Pow-Empty-----------------------
-/-
-def Pow_empty {α : Type}: (𝟘 → α) → 𝟙
-  | _ => ()
-
-def Empty_fun {α : Type} : 𝟘 → α
-
-def Unit_to_pow {α : Type}: 𝟙 → 𝟘 → α
-  | _ => Empty_fun
 
 theorem only_one_empty_fun {α : Type}:
   ∀ (g g' : 𝟘 → α), g = g' :=
@@ -174,9 +169,8 @@ by
     rw [comp_def, Unit_to_pow, Pow_empty, id_def]
   · funext f
     rw [comp_def, Pow_empty, Unit_to_pow, id_def]
-    simp
-    exact only_one_empty_fun Empty_fun f
--/
+    exact only_one_empty_fun fromEmpty f
+
 ------------------------Pow-One------------------------
 
 theorem iso_pow_unit {α : Type}:
@@ -191,7 +185,7 @@ by
 ------------------------Pow-Two------------------------
 
 theorem iso_pow_two {α : Type}:
-  (𝟙 ⊕ 𝟙 → α) ≅ (α × α) :=
+  (𝟚 → α) ≅ (α × α) :=
 by
   refine ⟨Pow_two, Two_pow, ?_, ?_⟩
   · funext w
@@ -214,19 +208,19 @@ by
     rw [comp_def, One_pow, One_pow_back, id_def]
 
 -----------------------Empty-Pow-----------------------
-
-/-theorem iso_empty_pow {α : Type}:
+/-
+theorem iso_empty_pow {α : Type}:
   (α → 𝟘) ≅ 𝟘 :=
 by
+  sorry
 -/
-
 --------------------Empty-Pow-Empty--------------------
-/--/
+
 theorem iso_empty_pow_empty:
   (𝟘 → 𝟘) ≅ 𝟙 :=
 by
   exact iso_eq_one
--/
+
 ------------------------Distr-L------------------------
 
 theorem iso_distr_L {α β δ : Type}:
@@ -234,12 +228,12 @@ theorem iso_distr_L {α β δ : Type}:
 by
   refine ⟨Distr α β δ, Distr_back, ?_, ?_⟩
   · funext x
-    rw [comp_def, Distr_back, Distr, id_def]
+    rw [comp_def, id_def]
     cases x with
     | inl da => rfl
     | inr db => rfl
   · funext ⟨d, x⟩
-    rw [comp_def, Distr, Distr_back, id_def]
+    rw [comp_def, id_def]
     cases x with
     | inl a => rfl
     | inr b => rfl
@@ -247,23 +241,23 @@ by
 ------------------------Sum-Ass------------------------
 
 theorem iso_sum_ass {α β γ : Type}:
-  (α ⊕ β ⊕ γ) ≅ ((α ⊕ β) ⊕ γ) :=
+  ((α ⊕ β) ⊕ γ) ≅ (α ⊕ β ⊕ γ) :=
 by
-  refine ⟨Ass_sum_one, Ass_sum_two, ?_, ?_⟩
-  · funext x
-    rw [comp_def, Ass_sum_two, Ass_sum_one, id_def]
-    cases x with
-    | inl ab => cases ab with
-                | inl a => rfl
-                | inr b => rfl
-    | inr c => rfl
+  refine ⟨Ass_sum_two, Ass_sum_one, ?_, ?_⟩
   · funext y
-    rw [comp_def, Ass_sum_one, Ass_sum_two, id_def]
+    rw [comp_def, id_def]
     cases y with
     | inl a => rfl
     | inr bc => cases bc with
                 | inl b => rfl
                 | inr c => rfl
+  · funext x
+    rw [comp_def, id_def]
+    cases x with
+    | inl ab => cases ab with
+                | inl a => rfl
+                | inr b => rfl
+    | inr c => rfl
 
 ------------------------Sum-Com------------------------
 
@@ -272,12 +266,12 @@ theorem iso_sum_com {α β : Type}:
 by
   refine ⟨Com_sum, Com_sum, ?_, ?_⟩
   · funext x
-    rw [comp_def, Com_sum, Com_sum, id]
+    rw [comp_def, id_def]
     cases x with
     | inr a => rfl
     | inl b => rfl
   · funext y
-    rw [comp_def, Com_sum, Com_sum, id_def]
+    rw [comp_def, id_def]
     cases y with
     | inr b => rfl
     | inl a => rfl
@@ -291,7 +285,7 @@ by
   · funext a
     rw [comp_def, Sum_id, Id_sum, id_def]
   · funext x
-    rw [comp_def, Id_sum, Sum_id, id_def]
+    rw [comp_def, id_def]
     cases x with
     | inl a => rfl
     | inr e => contradiction
@@ -319,92 +313,60 @@ by
     rw [comp_def, Com_prod, Com_prod, id]
 
 ------------------------Distr-R------------------------
-/-
-theorem iso_distr_R {α β δ : Type}:
-  ((α ⊕ β) × δ) ≅ (α × δ ⊕ β × δ) :=
-by
 
-  have h : ((α ⊕ β) × δ) ≅ (δ × (α ⊕ β)) :=
-  by
-    exact iso_prod_com
-  have h1 : (δ × (α ⊕ β)) ≅ (δ × α ⊕ δ × β) :=
-  by
-    exact iso_distr_L
-  have h2 : (δ × α ⊕ δ × β) ≅ (α × δ ⊕ β × δ) :=
-  by
-    have h': (δ × α) ≅ (α × δ) :=
-    by
-      exact iso_prod_com
-    have h'': (δ × β) ≅ (β × δ) :=
-    by
-      exact iso_prod_com
-    exact iso_sum (δ × α) (α × δ) (δ × β) (β × δ) ⟨h', h''⟩
-  have h3 : (δ × (α ⊕ β)) ≅ (α × δ ⊕ β × δ) :=
-  by
-    exact iso_trans (δ × (α ⊕ β)) (δ × α ⊕ δ × β) (α × δ ⊕ β × δ) h1 h2
-  exact iso_trans ((α ⊕ β) × δ) (δ × (α ⊕ β)) (α × δ ⊕ β × δ) h h3
--/
+theorem iso_distr_R {α β δ : Type}:
+  ((α ⊕ β) × δ) ≅ ((α × δ) ⊕ (β × δ)) :=
+by
+  calc
+    (α ⊕ β) × δ
+    _ ≅ (δ × (α ⊕ β))       := iso_prod_com
+    _ ≅ ((δ × α) ⊕ (δ × β)) := iso_distr_L
+    _ ≅ ((α × δ) ⊕ (β × δ)) := iso_sum ⟨iso_prod_com, iso_prod_com⟩
+
 -------------------------Prod-Id-------------------------
 
 theorem iso_prod_id {α : Type}:
   (α × 𝟙) ≅ α :=
 by
-  refine ⟨Id_prod, Prod_id, ?_, ?_⟩
+  refine ⟨Id_prod, prod_id, ?_, ?_⟩
   · funext a
-    rw [comp_def, Prod_id, Id_prod, id_def]
+    rw [comp_def, prod_id, Id_prod, id_def]
   · funext w
-    rw [comp_def, Id_prod, Prod_id, id_def]
+    rw [comp_def, Id_prod, prod_id, id_def]
+
+------------------------Prod-Two-------------------------
+
+theorem iso_prod_two {α : Type}:
+  (𝟚 × α) ≅ (α ⊕ α) :=
+by
+  calc
+    (𝟚 × α)
+    _ ≅ ((𝟙 × α) ⊕ (𝟙 × α)) := iso_distr_R
+    _ ≅ ((α × 𝟙) ⊕ (α × 𝟙)) := iso_sum ⟨iso_prod_com, iso_prod_com⟩
+    _ ≅ (α ⊕ α)             := iso_sum ⟨iso_prod_id, iso_prod_id⟩
 
 ------------------------Prod-Anul------------------------
 
-/-
-def to_empty {α : Type}: α × 𝟘 → Empty
-  | w => w.2
-
-def from_empty {α : Type}: 𝟘 → α × Empty
-  | x => ⟨Empty_fun x, x⟩
-
-theorem iso_prod_anul {a : Type}:
+theorem iso_prod_anul {α : Type}:
   (α × 𝟘) ≅ 𝟘 :=
 by
-  refine ⟨to_empty, from_empty, ?_, ?_⟩
+  refine ⟨prodToEmpty, toProdEmpty, ?_, ?_⟩
   · funext x
-    rw [comp_def, from_empty, to_empty, id_def]
+    nomatch x
   · funext x
-    rw [comp_def, from_empty, to_empty, id_def]
-    simp
-    -/
+    nomatch x.2
 
 -----------------------Pow-Two-Sum-----------------------
-/-
+
 theorem iso_pow_two_sum {α β : Type}:
-  (𝟙 ⊕ 𝟙 → α ⊕ β) ≅ (α × α ⊕ α × β ⊕ β × α ⊕ β × β) :=
+  (𝟚 → α ⊕ β) ≅ ((𝟚 → α) ⊕ (𝟚 × α × β) ⊕ (𝟚 → β)) :=
 by
-  have h1: (𝟙 ⊕ 𝟙 → α ⊕ β) ≅ ((α ⊕ β) × (α ⊕ β)) :=
-  by
-    exact iso_pow_two
-  have h2: ((α ⊕ β) × (α ⊕ β)) ≅ ((α ⊕ β) × α ⊕ (α ⊕ β) × β) :=
-  by
-    exact iso_distr_L
-  have h3: ((α ⊕ β) × α ⊕ (α ⊕ β) × β) ≅ (α × (α ⊕ β) ⊕ β × (α ⊕ β)) :=
-  by
-    have h': ((α ⊕ β) × α) ≅ (α × (α ⊕ β)) :=
-    by
-      exact iso_prod_com
-    have h'': ((α ⊕ β) × β) ≅ (β × (α ⊕ β)) :=
-    by
-      exact iso_prod_com
-    exact iso_sum ((α ⊕ β) × α) (α × (α ⊕ β)) ((α ⊕ β) × β) (β × (α ⊕ β)) ⟨h',h''⟩
-  have h4: (α × (α ⊕ β) ⊕ β × (α ⊕ β)) ≅ (α × α ⊕ α × β ⊕ β × α ⊕ β × β) :=
-  by
-    have h': (α × (α ⊕ β)) ≅ (α × α ⊕ α × β) :=
-    by
-      exact iso_distr_L
-    have h'': (β × (α ⊕ β)) ≅ (β × α ⊕ β × β) :=
-    by
-      exact iso_distr_L
-    have h''': (α × (α ⊕ β) ⊕ β × (α ⊕ β)) ≅ ((α × α ⊕ α × β) ⊕ β × α ⊕ β × β) := by
-      exact iso_sum (α × (α ⊕ β)) (α × α ⊕ α × β) (β × (α ⊕ β)) (β × α ⊕ β × β) ⟨h', h''⟩
-    sorry
-  apply iso_trans (α × (α ⊕ β) ⊕ β × (α ⊕ β))
--/
+  calc
+    (𝟚 → α ⊕ β)
+    _ ≅ ((α ⊕ β) × (α ⊕ β))                           := iso_pow_two
+    _ ≅ ((α × (α ⊕ β)) ⊕ (β × (α ⊕ β)))              := iso_distr_R
+    _ ≅ (((α × α) ⊕ (α × β)) ⊕ (β × α) ⊕ (β × β))    := iso_sum ⟨iso_distr_L, iso_distr_L⟩
+    _ ≅ (((𝟚 → α) ⊕ (α × β)) ⊕ (α × β) ⊕ (𝟚 → β))    := iso_sum ⟨iso_sum ⟨iso_symm (𝟚 → α) (α × α) iso_pow_two, by apply iso_refl⟩, iso_sum ⟨iso_prod_com, iso_symm (𝟚 → β) (β × β) iso_pow_two⟩⟩
+    _ ≅ ((𝟚 → α) ⊕ ((α × β) ⊕ (α × β) ⊕ (𝟚 → β)))    := iso_sum_ass
+    _ ≅ ((𝟚 → α) ⊕ ((α × β) ⊕ (α × β)) ⊕ (𝟚 → β))    := iso_sum ⟨by apply iso_refl, iso_symm (((α × β) ⊕ (α × β)) ⊕ (𝟚 → β)) ((α × β) ⊕ (α × β) ⊕ (𝟚 → β)) iso_sum_ass⟩
+    _ ≅ ((𝟚 → α) ⊕ (𝟚 × α × β) ⊕ (𝟚 → β))             := iso_sum ⟨by apply iso_refl, iso_sum ⟨iso_symm (𝟚 × α × β) ((α × β) ⊕ (α × β)) iso_prod_two, by apply iso_refl⟩⟩

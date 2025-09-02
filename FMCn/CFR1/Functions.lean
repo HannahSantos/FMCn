@@ -4,6 +4,7 @@ namespace data
 
 notation:max "𝟘" => Empty
 notation:max "𝟙" => Unit
+notation:max "𝟚" => 𝟙 ⊕ 𝟙
 
 def id : α → α
   | x => x
@@ -114,5 +115,35 @@ def Id_prod {α : Type} : α × 𝟙 → α
 def id_prod {α : Type} : 𝟙 × α → α
   := Id_prod ⋄ Com_prod
 
-def Prod_id {α : Type} : α → α × 𝟙
+def prod_id {α : Type} : α → α × 𝟙
   | a => ⟨a, ()⟩
+
+def sumTwice {α : Type} : α ⊕ α → 𝟚 × α
+  | .inl a => ⟨.inl (), a⟩
+  | .inr a => ⟨.inr (), a⟩
+
+def prodTwo {α : Type} : 𝟚 × α → α ⊕ α
+  | ⟨.inl _, a⟩ => .inl a
+  | ⟨.inr _, a⟩ => .inr a
+
+def powTwo {α : Type} : (𝟚 → α) → α × α
+  | f => ⟨f (.inl ()), f (.inr ())⟩
+
+def prodTwice {α : Type} : α × α → 𝟚 → α
+  | ⟨a₁, _⟩, .inl _ => a₁
+  | ⟨_, a₂⟩, .inr _ => a₂
+
+def fromEmpty {α : Type} : 𝟘 → α
+  := λ e ↦ nomatch e
+
+def prodToEmpty {α : Type}: α × 𝟘 → Empty
+  | w => w.2
+
+def toProdEmpty {α : Type}: 𝟘 → α × Empty
+  | x => ⟨fromEmpty x, x⟩
+
+def Pow_empty {α : Type}: (𝟘 → α) → 𝟙
+  | _ => ()
+
+def Unit_to_pow {α : Type}: 𝟙 → 𝟘 → α
+  | _ => fromEmpty
