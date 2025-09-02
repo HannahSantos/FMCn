@@ -8,7 +8,7 @@ open MonoidM
 
 def idMM [MonoidM M] (x : M) : Prop :=
   (∀ (a : M), a ⋆ x = a) ∧ ∀ (b : M), x ⋆ b = b
-notation:65 x:65 " é a (⋆)-identidade" => idMM x
+notation:65 x:65 " is_(⋆)-id" => idMM x
 
 ------------------------------------------------
 -- Pows Multiplicativos :
@@ -34,7 +34,7 @@ open MonoidA
 
 def idMA [MonoidA M] (x : M) : Prop :=
   (∀ (a : M), a ⊹ x = a) ∧ ∀ (b : M), x ⊹ b = b
-notation:65 x:65 " é a (⊹)-identidade" => idMA x
+notation:65 x:65 " is_(⊹)-id" => idMA x
 
 ------------------------------------------------
 -- Pows Aditivos :

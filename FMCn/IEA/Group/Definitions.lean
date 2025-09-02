@@ -11,7 +11,7 @@ open MonoidM GroupM
 
 def invGM [GroupM G] (x a : G): Prop :=
   x ⋆ a = e ∧ a ⋆ x = e
-notation:65 a:65 " é o (⋆)-inverso de " b:66 => invGM a b
+notation:65 a:65 " is_(⋆)-invOf " b:66 => invGM a b
 
 ------------------------------------------------
 -- GroupM-Homomorphisms :
@@ -19,18 +19,18 @@ notation:65 a:65 " é o (⋆)-inverso de " b:66 => invGM a b
 
 def resp_opm [GroupM G] [GroupM H] (φ : G → H) : Prop :=
   ∀ (a b : G), φ (a ⋆ b) = (φ a) ⋆ (φ b)
-notation:65 φ:65 " respeita (⋆)" => resp_opm φ
+notation:65 φ:65 " resp(⋆)" => resp_opm φ
 
 def resp_idm [GroupM G] [GroupM H] (φ : G → H) : Prop :=
   φ (e : G) = (e : H)
-notation:65 φ:65 " respeita 'e'" => resp_idm φ
+notation:65 φ:65 " resp'e'" => resp_idm φ
 
 def resp_invm [GroupM G] [GroupM H] (φ : G → H) : Prop :=
   ∀ (a : G), φ a⁻¹ = (φ a)⁻¹
-notation:65 φ:65 " respeita (⁻¹)" => resp_invm φ
+notation:65 φ:65 " resp(⁻¹)" => resp_invm φ
 
 def GroupM_homomorfismo [GroupM G] [GroupM H] (φ : G → H) : Prop :=
-  φ respeita (⋆) ∧ φ respeita 'e' ∧ φ respeita (⁻¹)
+  φ resp(⋆) ∧ φ resp'e' ∧ φ resp(⁻¹)
 notation:65 φ:65 " G-Mhomo" => GroupM_homomorfismo φ
 
 def GroupM_isomorfismo [GroupM G] [GroupM H] (φ : G → H) : Prop :=
@@ -50,7 +50,7 @@ open MonoidA GroupA
 
 def invGA [GroupA G] (x a : G): Prop :=
   x ⊹ a = z ∧ a ⊹ x = z
-notation:65 a:65 " é o (⊹)-inverso de " b:66 => invGA a b
+notation:65 a:65 " is_(⊹)-invOf " b:66 => invGA a b
 
 ------------------------------------------------
 -- GroupA-Homomorphisms :
@@ -58,18 +58,18 @@ notation:65 a:65 " é o (⊹)-inverso de " b:66 => invGA a b
 
 def resp_opa [GroupA G] [GroupA H] (φ : G → H) : Prop :=
   ∀ (a b : G), φ (a ⊹ b) = (φ a) ⊹ (φ b)
-notation:65 φ:65 " respeita (⊹)" => resp_opa φ
+notation:65 φ:65 " resp(⊹)" => resp_opa φ
 
 def resp_ida [GroupA G] [GroupA H] (φ : G → H) : Prop :=
   φ (z : G) = (z : H)
-notation:65 φ:65 " respeita 'z'" => resp_ida φ
+notation:65 φ:65 " resp'z'" => resp_ida φ
 
 def resp_inva [GroupA G] [GroupA H] (φ : G → H) : Prop :=
   ∀ (a : G), φ (−a) = −(φ a)
-notation:65 φ:65 " respeita (−)" => resp_inva φ
+notation:65 φ:65 " resp(−)" => resp_inva φ
 
 def GroupA_homomorfismo [GroupA G] [GroupA H] (φ : G → H) : Prop :=
-  φ respeita (⊹) ∧ φ respeita 'z' ∧ φ respeita (−)
+  φ resp(⊹) ∧ φ resp'z' ∧ φ resp(−)
 notation:65 φ:65 " G-Ahomo" => GroupA_homomorfismo φ
 
 def GroupA_isomorfismo [GroupA G] [GroupA H] (φ : G → H) : Prop :=
